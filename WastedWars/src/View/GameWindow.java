@@ -21,10 +21,12 @@ public class GameWindow {
         frame = new JFrame("Wasted Wars - Mini Game");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        // Set the frame undecorated before making it visible
+        frame.setUndecorated(true);
+
         // Set the layout to GridBagLayout for more control
         frame.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        frame.setVisible(true); // Ensure the frame is visible before changing size
 
         // Create a panel for the top-left (Mini Game placeholder)
         JPanel miniGamePanel = new JPanel();
@@ -55,7 +57,7 @@ public class GameWindow {
         // Player icon placeholder
         JPanel playerIconPanel = new JPanel();
         playerIconPanel.setPreferredSize(new Dimension(100, 100));
-        playerIconPanel.setBackground(Color.CYAN); // Placeholder color
+        playerIconPanel.setBackground(new Color(134, 0, 179)); // Placeholder color
         currentPlayerPanel.add(playerIconPanel, BorderLayout.NORTH);
 
         // Current Player name
@@ -114,8 +116,12 @@ public class GameWindow {
         frame.add(otherPlayersPanel, gbc);
 
         // Display the window
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
-        frame.setVisible(true);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Full screen
+        frame.setVisible(true); // Now it's visible
     }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
 }
