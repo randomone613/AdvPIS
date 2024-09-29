@@ -57,7 +57,7 @@ public class GameWindow {
         // Player icon placeholder
         JPanel playerIconPanel = new JPanel();
         playerIconPanel.setPreferredSize(new Dimension(100, 100));
-        playerIconPanel.setBackground(new Color(134, 0, 179)); // Placeholder color
+        playerIconPanel.setBackground(new Color(134, 0, 178)); // Placeholder color
         currentPlayerPanel.add(playerIconPanel, BorderLayout.NORTH);
 
         // Current Player name
