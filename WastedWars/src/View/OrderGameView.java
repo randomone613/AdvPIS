@@ -4,11 +4,13 @@ import WastedWars.src.Model.OrderGameModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.*;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class OrderGameView extends JPanel {
@@ -42,7 +44,9 @@ public class OrderGameView extends JPanel {
         // Panel for slots (centered on the screen)
         slotPanel = new JPanel();
         slotPanel.setLayout(new GridLayout(1, NUM_CARDS, 10, 10));
-        slotPanel.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width)/5, (Toolkit.getDefaultToolkit().getScreenSize().height)/5, SLOT_SIZE * NUM_CARDS + 40, SLOT_SIZE);  // Center the slot panel
+        slotPanel.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width) / 5,
+                (Toolkit.getDefaultToolkit().getScreenSize().height) / 5, SLOT_SIZE * NUM_CARDS + 40, SLOT_SIZE);  // Center the slot panel
+
         for (JLabel slot : model.getSlotLabels()) {
             slot.setPreferredSize(new Dimension(SLOT_SIZE, SLOT_SIZE)); // Adjust size of the slot
             slot.setTransferHandler(new ValueImportTransferHandler()); // Enable drag and drop
@@ -57,7 +61,8 @@ public class OrderGameView extends JPanel {
 
         // Panel for cards (randomly placed around the slots)
         cardPanel = new JPanel(null);  // Absolute positioning inside card panel
-        cardPanel.setBounds(0, 100, 2*(Toolkit.getDefaultToolkit().getScreenSize().width)/3, 2*(Toolkit.getDefaultToolkit().getScreenSize().height)/3);  // Set card panel bounds to cover most of the screen
+        cardPanel.setBounds(0, 100, 2 * (Toolkit.getDefaultToolkit().getScreenSize().width) / 3,
+                2 * (Toolkit.getDefaultToolkit().getScreenSize().height) / 3);  // Set card panel bounds to cover most of the screen
         cardPanel.setOpaque(false);  // Transparent so we can see the background
         add(cardPanel);
 
@@ -78,8 +83,8 @@ public class OrderGameView extends JPanel {
             // Generate random positions around the slotPanel area
             int xPos, yPos;
             do {
-                xPos = random.nextInt((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - CARD_SIZE);
-                yPos = random.nextInt((Toolkit.getDefaultToolkit().getScreenSize().height)/2 - CARD_SIZE);
+                xPos = random.nextInt((Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - CARD_SIZE);
+                yPos = random.nextInt((Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - CARD_SIZE);
             } while (isOverlappingSlotArea(xPos, yPos));  // Ensure cards aren't overlapping slots
 
             card.setBounds(xPos, yPos, CARD_SIZE, CARD_SIZE);  // Set random position for the card
@@ -107,13 +112,39 @@ public class OrderGameView extends JPanel {
 
         @Override
         public int getSourceActions(JComponent c) {
-            return MOVE; // Allow the card to be moved
+            return MOVE;
         }
 
         @Override
-        public void exportDone(JComponent c, Transferable t, int action) {
+        public void exportAsDrag(JComponent comp, InputEvent e, int action) {
+            super.exportAsDrag(comp, e, action);
+            if (e instanceof MouseEvent) {
+                comp.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR)); // Change cursor to move
+            }
+        }
+
+        @Override
+        public Icon getVisualRepresentation(Transferable t) {
+            JButton button = new JButton();
+            try {
+                String cardText = t.getTransferData(DataFlavor.stringFlavor).toString();
+                button.setText(cardText);
+            } catch (UnsupportedFlavorException | IOException e) {
+                e.printStackTrace(); // Handle exceptions properly
+            }
+            button.setPreferredSize(new Dimension(CARD_SIZE, CARD_SIZE));
+            button.setBackground(Color.LIGHT_GRAY); // Set a background color for better visibility
+            button.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Set a border for clarity
+            return button.getIcon(); // Return the icon of the button
+        }
+
+        @Override
+        public void exportDone(JComponent source, Transferable data, int action) {
             if (action == MOVE) {
-                ((JButton) c).setVisible(false); // Hide the button after it's moved
+                JButton button = (JButton) source;
+                cardPanel.remove(button); // Remove the card from the cardPanel
+                cardPanel.revalidate();    // Refresh the card panel
+                cardPanel.repaint();       // Repaint the card panel
             }
         }
     }
@@ -145,8 +176,8 @@ public class OrderGameView extends JPanel {
                     return false; // If the slot is not empty, don't allow drop
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (UnsupportedFlavorException | IOException e) {
+                e.printStackTrace(); // Handle exceptions properly
             }
             return false;
         }
@@ -156,46 +187,45 @@ public class OrderGameView extends JPanel {
     private class ValueExportFromSlotHandler extends TransferHandler {
         @Override
         protected Transferable createTransferable(JComponent c) {
-            JLabel label = (JLabel) c;
-            String text = label.getText();
-            return new StringSelection(text);
+            return new StringSelection(((JLabel) c).getText()); // Transfer the text of the slot
         }
 
         @Override
         public int getSourceActions(JComponent c) {
-            return MOVE; // Allow moving the value from the slot
+            return MOVE; // Allow moving
         }
 
         @Override
-        public void exportDone(JComponent c, Transferable t, int action) {
+        public void exportDone(JComponent source, Transferable data, int action) {
             if (action == MOVE) {
-                JLabel label = (JLabel) c;
-                label.setText(""); // Clear the slot after dragging the value out
-                messageLabel.setText(""); // Clear message when a card is removed
+                JLabel label = (JLabel) source;
+                label.setText(""); // Clear the slot when the value is moved
+                label.setTransferHandler(new ValueImportTransferHandler()); // Reset the transfer handler for the slot
             }
         }
     }
 
-    // Method to check if the cards in the slots are in the correct order
+    // Method to check if the game has been won
     private void checkWinCondition() {
+        // Create an array to hold slot values
+        String[] slotValues = new String[model.getSlotLabels().size()];
         boolean allFilled = true;
-        String[] values = new String[NUM_CARDS];
-        for (int i = 0; i < NUM_CARDS; i++) {
+
+        for (int i = 0; i < model.getSlotLabels().size(); i++) {
             JLabel slot = model.getSlotLabels().get(i);
-            values[i] = slot.getText();
-            if (values[i].isEmpty()) {
-                allFilled = false; // At least one slot is empty
-                break;
+            if (slot.getText().isEmpty()) {
+                allFilled = false; // If any slot is empty, set the flag to false
+                break; // Exit loop if any slot is empty
             }
+            slotValues[i] = slot.getText(); // Store the slot text
         }
 
-        // If all slots are filled, check for the correct order
+        // If all slots are filled, check the order
         if (allFilled) {
-            boolean isCorrectOrder = model.checkOrder(values); // Check if the order is correct
-            if (isCorrectOrder) {
+            if (model.checkOrder(slotValues)) { // Pass the slot values to checkOrder
                 messageLabel.setText("You Win!");
             } else {
-                messageLabel.setText("You Lose!");
+                messageLabel.setText("You Lose!"); // Notify the user of loss
             }
         }
     }
