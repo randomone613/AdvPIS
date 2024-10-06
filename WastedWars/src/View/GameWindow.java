@@ -32,8 +32,8 @@ public class GameWindow {
         JPanel miniGamePanel = new JPanel();
         miniGamePanel.setBackground(Color.LIGHT_GRAY);
         miniGamePanel.setPreferredSize(new Dimension(
-                2*(Toolkit.getDefaultToolkit().getScreenSize().width)/3,
-                2*(Toolkit.getDefaultToolkit().getScreenSize().height)/3
+                2 * (Toolkit.getDefaultToolkit().getScreenSize().width) / 3,
+                2 * (Toolkit.getDefaultToolkit().getScreenSize().height) / 3
         ));
         miniGamePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JLabel miniGameLabel = new JLabel("Mini Game", SwingConstants.CENTER);
@@ -55,10 +55,24 @@ public class GameWindow {
         currentPlayerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         // Player icon placeholder
-        JPanel playerIconPanel = new JPanel();
-        playerIconPanel.setPreferredSize(new Dimension(100, 100));
-        playerIconPanel.setBackground(new Color(134, 0, 178)); // Placeholder color
-        currentPlayerPanel.add(playerIconPanel, BorderLayout.NORTH);
+        JButton quitGame = new JButton("Quit Game");
+        quitGame.setPreferredSize(new Dimension(100, 100));
+        quitGame.setBackground(new Color(134, 0, 178)); // Placeholder color
+
+        // Remove the border around the button
+        quitGame.setFocusPainted(false); // No focus border when clicked
+
+        // Add ActionListener to the quitGame button
+        quitGame.addActionListener(e -> {
+            // Confirm before closing the window
+            int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?", "Quit Game", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                frame.dispose(); // Close the game window
+            }
+        });
+
+
+        currentPlayerPanel.add(quitGame, BorderLayout.NORTH);
 
         // Current Player name
         JLabel playerNameLabel = new JLabel(currentPlayer.getUsername(), SwingConstants.CENTER);
@@ -123,5 +137,4 @@ public class GameWindow {
     public JFrame getFrame() {
         return frame;
     }
-
 }
