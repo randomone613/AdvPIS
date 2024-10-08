@@ -2,17 +2,16 @@ package WastedWars.src.View;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
-public class CaptchaView extends JPanel {
-    private JButton[] keys; // Buttons representing keys on the keyboard
+public class TFView extends JPanel {
+    private JLabel[] keys; // Labels representing keys on the keyboard
     private JLabel messageLabel;
 
-    public CaptchaView() {
+    public TFView() {
         setLayout(new GridBagLayout()); // Using GridBagLayout for custom layout
         GridBagConstraints gbc = new GridBagConstraints();
 
-        keys = new JButton[30]; // Create 30 keys for AZERTY layout
+        keys = new JLabel[30]; // Create 30 labels for AZERTY layout
 
         // AZERTY keyboard keys layout
         String[] azertyKeys = {
@@ -21,22 +20,24 @@ public class CaptchaView extends JPanel {
                 "W", "X", "C", "V", "B", "N", ",", ";", ":", "!"
         };
 
-        // Initialize buttons for keys and add to the panel
+        // Initialize labels for keys and add to the panel
         int index = 0;
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 10; col++) {
                 if (index < azertyKeys.length) {
-                    keys[index] = new JButton(azertyKeys[index]);
+                    keys[index] = new JLabel(azertyKeys[index], SwingConstants.CENTER);
                     keys[index].setFont(new Font("Arial", Font.BOLD, 18));
+                    keys[index].setOpaque(true); // To allow background color change
                     keys[index].setBackground(Color.LIGHT_GRAY);
-                    keys[index].setFocusable(false); // Make the buttons non-focusable
+                    keys[index].setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                    keys[index].setPreferredSize(new Dimension(50, 50)); // Size of each key
 
-                    // Set GridBag constraints for button placement
+                    // Set GridBag constraints for label placement
                     gbc.gridx = col;
                     gbc.gridy = row;
                     gbc.fill = GridBagConstraints.BOTH;
-                    gbc.weightx = 1.0; // Equal width for all buttons
-                    gbc.weighty = 1.0; // Equal height for all buttons
+                    gbc.weightx = 1.0; // Equal width for all labels
+                    gbc.weighty = 1.0; // Equal height for all labels
                     gbc.insets = new Insets(5, 5, 5, 5); // Padding
 
                     add(keys[index], gbc);
@@ -77,30 +78,24 @@ public class CaptchaView extends JPanel {
     }
 
     public void highlightKey(String key, boolean isRightHand) {
-        for (JButton button : keys) {
-            if (button.getText().equals(key)) {
+        for (JLabel label : keys) {
+            if (label.getText().equals(key)) {
                 if (isRightHand) {
-                    button.setBackground(new Color(255, 77, 77)); // Highlight right-hand keys in red
+                    label.setBackground(new Color(255, 77, 77)); // Highlight right-hand keys in red
                 } else {
-                    button.setBackground(new Color(77, 148, 255)); // Highlight left-hand keys in blue
+                    label.setBackground(new Color(77, 148, 255)); // Highlight left-hand keys in blue
                 }
             }
         }
     }
 
     public void resetKeys() {
-        for (JButton button : keys) {
-            button.setBackground(Color.LIGHT_GRAY); // Reset button color
+        for (JLabel label : keys) {
+            label.setBackground(Color.LIGHT_GRAY); // Reset label color
         }
     }
 
     public void displayMessage(String message) {
         messageLabel.setText(message);
-    }
-
-    public void addKeyListener(ActionListener listener) {
-        for (JButton button : keys) {
-            button.addActionListener(listener);
-        }
     }
 }
