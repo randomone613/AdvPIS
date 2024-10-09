@@ -15,13 +15,12 @@ public class WastedWarsController {
     private List<String> miniGames;
     private boolean isRandomMode = false; // To track if we are in random mode
 
-
     public WastedWarsController(WastedWarsModel model, WastedWarsView view) {
         this.model = model;
         this.view = view;
 
         // Assuming we have a list of available mini-games in the model
-        this.miniGames = List.of("OrderGame", "MemoryGame", "MathGame"); // List of mini-games
+        this.miniGames = List.of("OrderGame", "Question For A Shot", "Twisted Fingers"); // List of mini-games
 
         // Random Mode button action
         view.getRandomModeButton().addActionListener(new ActionListener() {
@@ -95,17 +94,19 @@ public class WastedWarsController {
         switch (miniGame) {
             case "OrderGame":
                 new GameWindow(model, "OrderGame");
+                System.out.println("Starting mini-game: " + miniGame);
                 break;
-            case "QFAS":
+            case "Question For A Shot":
                 new GameWindow(model, "Question For A Shot");
+                System.out.println("Starting mini-game: " + miniGame);
                 break;
-            case "TF":
+            case "Twisted Fingers":
                 new GameWindow(model, "Twisted Fingers");
+                System.out.println("Starting mini-game: " + miniGame);
                 break;
             default:
                 JOptionPane.showMessageDialog(view.getFrame(), "Game not available!", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
     }
-
 }

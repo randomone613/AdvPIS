@@ -53,10 +53,12 @@ public class GameWindow {
 
         // Add mini games to the card layout
         QFASmodel = new QFASModel();
-        miniGamePanel.add(new QFASView(QFASmodel), "QFAS");         // Add QFAS mini-game
+        miniGamePanel.add(new QFASView(QFASmodel), "QFAS"); // Add QFAS mini-game
+
         OrderGamemodel = new OrderGameModel();
         miniGamePanel.add(new OrderGameView(OrderGamemodel), "OrderGame"); // Add OrderGame mini-game
-        miniGamePanel.add(new TFView(), "TF");              // Add TF mini-game
+
+        miniGamePanel.add(new TFView(), "TF"); // Add TF mini-game
 
         // Position the mini-game panel at the top-left (2/3 width and height)
         gbc.gridx = 0;
@@ -150,7 +152,7 @@ public class GameWindow {
 
     private void startTurn() {
         // Array of mini game names corresponding to their CardLayout identifiers
-        String[] miniGameNames = {"QFAS", "OrderGame", "TF"};
+        String[] miniGameNames = {"OrderGame", "Question For A Shot", "Twisted Fingers"};
 
         // Select a random mini game
         String selectedGame = miniGameNames[new Random().nextInt(miniGameNames.length)];
