@@ -1,19 +1,17 @@
-package WastedWars.src.Model;
-import java.util.Hashtable;
-import java.io.*;
+package WastedWars.src.MiniGames.QFAS;
 import java.util.*;
 import java.util.Random;
 import java.util.Map;
 
 //le but de ce mini jeu est d'afficher soit des questions de culture g ou des équations à résoudre
-public class QFAS { //question for a shot
+public class QFASModel { //question for a shot
 
     private Map<String, String> questions = new HashMap<>();
     private Random random = new Random();
     public String selectedQuestion;
     public String selectedAnswer;
 
-    public QFAS() {
+    public QFASModel() {
         questions.put("What is the largest ocean in the world?", "Pacific");
         questions.put("Which country has the largest population?", "China");
         questions.put("What is the capital of France?", "Paris");

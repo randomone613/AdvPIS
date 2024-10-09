@@ -1,4 +1,4 @@
-package WastedWars.src.Model;
+package WastedWars.src.MiniGames.TF;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.Random;
 
 //name : Twisted Fingers
 
-public class TF {
+public class TFModel {
     private List<String> requiredKeys; // List of keys that must be pressed
     private List<String> pressedKeys; // Keys pressed by the user
     private final Random random = new Random();
@@ -16,7 +16,7 @@ public class TF {
     private final String[] leftHandKeys = {"A", "Z", "E", "R", "T", "Q", "S", "D", "F", "G"};
     private final String[] rightHandKeys = {"Y", "U", "I", "O", "P", "H", "J", "K", "L", "M", "X", "C", "V", "B", "N"};
 
-    public TF(int keyCount) {
+    public TFModel(int keyCount) {
         requiredKeys = new ArrayList<>();
         pressedKeys = new ArrayList<>();
         selectKeys(keyCount);

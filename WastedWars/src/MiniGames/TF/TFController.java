@@ -1,17 +1,15 @@
-package WastedWars.src.Controller;
-
-import WastedWars.src.Model.TF;
-import WastedWars.src.View.TFView;
+package WastedWars.src.MiniGames.TF;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class TFController {
-    private TF model;
+    private TFModel model;
     private TFView view;
     private boolean gameOver = false; // To track game end state
+    private boolean win = false;
 
-    public TFController(TF model, TFView view) {
+    public TFController(TFModel model, TFView view) {
         this.model = model;
         this.view = view;
 
@@ -45,6 +43,7 @@ public class TFController {
             if (!model.getRequiredKeys().contains(pressedKey)) {
                 view.displayMessage("You Lose!");
                 gameOver = true; // Mark the game as over
+                win = false;
                 return;
             }
 
@@ -60,6 +59,15 @@ public class TFController {
         if (model.isGameWon()) {
             view.displayMessage("You Win!");
             gameOver = true; // Mark the game as over
+            win = true;
         }
+    }
+
+    public boolean getwin(){
+        return win;
+    }
+
+    public boolean getGameOver(){
+        return gameOver;
     }
 }

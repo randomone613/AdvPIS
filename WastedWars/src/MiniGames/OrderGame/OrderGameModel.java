@@ -1,4 +1,4 @@
-package WastedWars.src.Model;
+package WastedWars.src.MiniGames.OrderGame;
 
 import javax.swing.*;
 import java.util.ArrayList;

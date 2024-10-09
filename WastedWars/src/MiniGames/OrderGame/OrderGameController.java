@@ -1,7 +1,4 @@
-package WastedWars.src.Controller;
-
-import WastedWars.src.Model.OrderGameModel;
-import WastedWars.src.View.OrderGameView;
+package WastedWars.src.MiniGames.OrderGame;
 
 import javax.swing.*;
 import java.awt.datatransfer.*;

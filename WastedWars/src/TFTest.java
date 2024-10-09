@@ -1,8 +1,8 @@
 package WastedWars.src;
 
-import WastedWars.src.Model.TF;
-import WastedWars.src.View.TFView;
-import WastedWars.src.Controller.TFController;
+import WastedWars.src.MiniGames.TF.TFModel;
+import WastedWars.src.MiniGames.TF.TFView;
+import WastedWars.src.MiniGames.TF.TFController;
 
 import javax.swing.*;
 
@@ -11,9 +11,9 @@ public class TFTest {
         int keyCount = 3; // Number of random keys to select
 
         // Create instances of the model, view, and controller
-        TF TFModel = new TF(keyCount);
+        TFModel model = new TFModel(keyCount);
         TFView View = new TFView();
-        TFController TFController = new TFController(TFModel, View);
+        TFController TFController = new TFController(model, View);
 
         // Set up the JFrame
         JFrame frame = new JFrame("Captcha Mini Game");

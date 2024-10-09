@@ -4,29 +4,40 @@ import WastedWars.src.Model.WastedWarsModel;
 import WastedWars.src.View.GameWindow;
 import WastedWars.src.View.WastedWarsView;
 
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.Random;
 
 public class WastedWarsController {
     private WastedWarsModel model;
     private WastedWarsView view;
+    private List<String> miniGames;
+    private boolean isRandomMode = false; // To track if we are in random mode
+
 
     public WastedWarsController(WastedWarsModel model, WastedWarsView view) {
         this.model = model;
         this.view = view;
 
-        // Add ActionListeners for the mode buttons
+        // Assuming we have a list of available mini-games in the model
+        this.miniGames = List.of("OrderGame", "MemoryGame", "MathGame"); // List of mini-games
+
+        // Random Mode button action
         view.getRandomModeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameWindow(model); // Open the new game window
+                isRandomMode = true;
+                startRandomMiniGame();
             }
         });
 
+        // Choose Mode button action
         view.getChooseModeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameWindow(model); // Open the new game window
+                isRandomMode = false;
+                chooseMiniGame();
             }
         });
 
@@ -44,10 +55,10 @@ public class WastedWarsController {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    // Show confirmation dialog
-                    int result = JOptionPane.showConfirmDialog(view.getFrame(), "Do you really want to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+                    int result = JOptionPane.showConfirmDialog(view.getFrame(),
+                            "Do you really want to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
                     if (result == JOptionPane.YES_OPTION) {
-                        System.exit(0);  // Exit the app
+                        System.exit(0);
                     }
                 }
             }
@@ -56,4 +67,45 @@ public class WastedWarsController {
         view.getFrame().setFocusable(true);
         view.getFrame().requestFocusInWindow();
     }
+
+    // Start a random mini-game
+    private void startRandomMiniGame() {
+        Random random = new Random();
+        int randomIndex = random.nextInt(miniGames.size());
+        String selectedMiniGame = miniGames.get(randomIndex);
+        startMiniGame(selectedMiniGame);
+    }
+
+    // Open a dialog to choose a mini-game
+    private void chooseMiniGame() {
+        String[] miniGameOptions = miniGames.toArray(new String[0]); // Convert to array for JComboBox
+
+        // Show a dialog with a dropdown (JComboBox) for mini-game selection
+        String selectedGame = (String) JOptionPane.showInputDialog(view.getFrame(),
+                "Choose a Mini Game", "Choose Mini Game",
+                JOptionPane.QUESTION_MESSAGE, null, miniGameOptions, miniGameOptions[0]);
+
+        if (selectedGame != null) {
+            startMiniGame(selectedGame);
+        }
+    }
+
+    // Start the chosen mini-game
+    private void startMiniGame(String miniGame) {
+        switch (miniGame) {
+            case "OrderGame":
+                new GameWindow(model, "OrderGame");
+                break;
+            case "QFAS":
+                new GameWindow(model, "Question For A Shot");
+                break;
+            case "TF":
+                new GameWindow(model, "Twisted Fingers");
+                break;
+            default:
+                JOptionPane.showMessageDialog(view.getFrame(), "Game not available!", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+        }
+    }
+
 }

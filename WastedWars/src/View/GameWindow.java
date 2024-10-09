@@ -1,9 +1,13 @@
 package WastedWars.src.View;
 
+import WastedWars.src.MiniGames.OrderGame.OrderGameModel;
+import WastedWars.src.MiniGames.OrderGame.OrderGameView;
+import WastedWars.src.MiniGames.QFAS.QFASModel;
+import WastedWars.src.MiniGames.QFAS.QFASView;
+import WastedWars.src.MiniGames.TF.TFView;
 import WastedWars.src.Model.Player;
 import WastedWars.src.Model.WastedWarsModel;
 import WastedWars.src.Model.MiniGame;
-import WastedWars.src.MiniGames.SampleMiniGame; // Import your sample mini game class
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,12 +21,23 @@ public class GameWindow {
     private CardLayout cardLayout; // CardLayout for switching mini games
     private int currentTurnIndex = 0; // Index of the current player turn
     private final int TARGET_SIPS = 10; // Target sips to win
+    private QFASModel QFASmodel;
+    private OrderGameModel OrderGamemodel;
 
+    // Original constructor
     public GameWindow(WastedWarsModel model) {
         this.model = model;
         this.currentPlayer = model.getPlayers().get(currentTurnIndex); // Get the first player
         initializeWindow();
         startTurn(); // Start the first turn
+    }
+
+    // New constructor for specific mini-game
+    public GameWindow(WastedWarsModel model, String miniGame) {
+        this.model = model;
+        this.currentPlayer = model.getPlayers().get(currentTurnIndex); // Get the first player
+        initializeWindow();
+        startSelectedGame(miniGame); // Start the specified mini-game immediately
     }
 
     private void initializeWindow() {
@@ -37,8 +52,11 @@ public class GameWindow {
         miniGamePanel = new JPanel(cardLayout);
 
         // Add mini games to the card layout
-        miniGamePanel.add(new SampleMiniGame(), "SampleMiniGame");
-        // Add other mini games here, e.g. miniGamePanel.add(new AnotherMiniGame(), "AnotherMiniGame");
+        QFASmodel = new QFASModel();
+        miniGamePanel.add(new QFASView(QFASmodel), "QFAS");         // Add QFAS mini-game
+        OrderGamemodel = new OrderGameModel();
+        miniGamePanel.add(new OrderGameView(OrderGamemodel), "OrderGame"); // Add OrderGame mini-game
+        miniGamePanel.add(new TFView(), "TF");              // Add TF mini-game
 
         // Position the mini-game panel at the top-left (2/3 width and height)
         gbc.gridx = 0;
@@ -131,37 +149,60 @@ public class GameWindow {
     }
 
     private void startTurn() {
+        // Array of mini game names corresponding to their CardLayout identifiers
+        String[] miniGameNames = {"QFAS", "OrderGame", "TF"};
+
         // Select a random mini game
-        String[] miniGameNames = {"SampleMiniGame", /* other mini game names here */ };
         String selectedGame = miniGameNames[new Random().nextInt(miniGameNames.length)];
-        cardLayout.show(miniGamePanel, selectedGame); // Show the selected mini game
+
+        // Show the selected mini game
+        cardLayout.show(miniGamePanel, selectedGame);
 
         // Start the selected mini game
-        MiniGame miniGame = (MiniGame) miniGamePanel.getComponent(0); // Assuming the first game is the selected one
-        miniGame.startGame();
+        Component selectedComponent = getCurrentMiniGameComponent(selectedGame);
+        if (selectedComponent instanceof MiniGame) {
+            MiniGame miniGame = (MiniGame) selectedComponent;
+            miniGame.startGame();  // Start the mini-game logic
+        }
 
         // Show current player's turn in a dialog
         JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + "'s turn! Play the mini game.");
     }
 
-    // Method to process the outcome of the mini game
-    public void processOutcome() {
-        MiniGame miniGame = (MiniGame) miniGamePanel.getComponent(0); // Get the active mini game
+    private void startSelectedGame(String miniGame) {
+        // Show the selected mini game
+        cardLayout.show(miniGamePanel, miniGame);
 
-        // Update the sip counts based on the outcome
-        if (miniGame.isWin()) {
-            // Current player wins
-            currentPlayer.addSip(1); // Add sip to current player
-            JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + " wins the mini game! They gain 1 sip.");
-            for (Player player : model.getPlayers()) {
-                if (!player.equals(currentPlayer)) {
-                    player.addSip(1); // Add sip to other players
+        // Start the selected mini game
+        Component selectedComponent = getCurrentMiniGameComponent(miniGame);
+        if (selectedComponent instanceof MiniGame) {
+            MiniGame miniGameInstance = (MiniGame) selectedComponent;
+            miniGameInstance.startGame();  // Start the mini-game logic
+        }
+
+        // Show current player's turn in a dialog
+        JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + "'s turn! Play the mini game.");
+    }
+
+    public void processOutcome() {
+        Component selectedComponent = getCurrentMiniGameComponent(null);  // Get the active mini-game
+        if (selectedComponent instanceof MiniGame) {
+            MiniGame miniGame = (MiniGame) selectedComponent;
+
+            // Check win condition
+            if (miniGame.isWin()) {
+                // Current player wins - other players gain 1 sip
+                JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + " wins the mini game! Other players gain 1 sip.");
+                for (Player player : model.getPlayers()) {
+                    if (!player.equals(currentPlayer)) {
+                        player.addSip(1);
+                    }
                 }
+            } else {
+                // Current player loses - they gain 1 sip
+                JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + " loses the mini game! They gain 1 sip.");
+                currentPlayer.addSip(1);
             }
-        } else {
-            // Current player loses
-            currentPlayer.addSip(1); // Add sip to current player
-            JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + " loses the mini game! They gain 1 sip.");
         }
 
         // Check for game end
@@ -171,6 +212,16 @@ public class GameWindow {
         currentTurnIndex = (currentTurnIndex + 1) % model.getPlayers().size();
         currentPlayer = model.getPlayers().get(currentTurnIndex);
         startTurn(); // Start the next turn
+    }
+
+    // Helper method to get the currently visible mini-game component
+    private Component getCurrentMiniGameComponent(String miniGameName) {
+        for (Component comp : miniGamePanel.getComponents()) {
+            if (miniGamePanel.isAncestorOf(comp) && comp.isVisible()) {
+                return comp;
+            }
+        }
+        return null;
     }
 
     // Check if any player has reached the target sips

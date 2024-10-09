@@ -1,11 +1,15 @@
-package WastedWars.src.View;
+package WastedWars.src.MiniGames.TF;
+
+import WastedWars.src.Model.MiniGame;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TFView extends JPanel {
+public class TFView extends JPanel implements MiniGame {
     private JLabel[] keys; // Labels representing keys on the keyboard
     private JLabel messageLabel;
+    private TFController controller;
+    private TFModel model;
 
     public TFView() {
         setLayout(new GridBagLayout()); // Using GridBagLayout for custom layout
@@ -60,6 +64,9 @@ public class TFView extends JPanel {
 
         setFocusable(true);
         requestFocusInWindow();
+
+        model = new TFModel(3);
+        controller = new TFController(model, this);
     }
 
     private void addLegend(GridBagConstraints gbc) {
@@ -97,5 +104,27 @@ public class TFView extends JPanel {
 
     public void displayMessage(String message) {
         messageLabel.setText(message);
+    }
+
+    @Override
+    public void startGame() {
+        TFModel model = new TFModel(3);
+        TFView View = new TFView();
+        TFController TFController = new TFController(model, View);
+    }
+
+    @Override
+    public void resetGame() {
+        startGame();
+    }
+
+    @Override
+    public boolean isWin() {
+        return controller.getwin();
+    }
+
+    @Override
+    public boolean isOver(){
+        return controller.getGameOver();
     }
 }
