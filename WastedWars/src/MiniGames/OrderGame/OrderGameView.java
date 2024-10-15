@@ -1,5 +1,7 @@
 package WastedWars.src.MiniGames.OrderGame;
 
+import WastedWars.src.Model.MiniGame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
@@ -9,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Random;
 
-public class OrderGameView extends JPanel {
+public class OrderGameView extends JPanel implements MiniGame {
     private OrderGameModel model;
     private JPanel cardPanel;
     private JPanel slotPanel;
@@ -19,6 +21,9 @@ public class OrderGameView extends JPanel {
     private static final int CARD_SIZE = 60;  // Size of each card
     private static final int SLOT_SIZE = 60;  // Size of each slot
     private static final int NUM_CARDS = 5;   // Number of cards
+
+    private boolean win = false;
+    private boolean over = false;
 
     public OrderGameView(OrderGameModel model) {
         this.model = model;
@@ -97,6 +102,27 @@ public class OrderGameView extends JPanel {
 
         // Check if the card position overlaps with the slot area
         return (x + CARD_SIZE > slotX && x < slotX + slotWidth) && (y + CARD_SIZE > slotY && y < slotY + slotHeight);
+    }
+
+    @Override
+    public void startGame() {
+        OrderGameModel model = new OrderGameModel();
+        new OrderGameView(model);
+    }
+
+    @Override
+    public void resetGame() {
+        startGame();
+    }
+
+    @Override
+    public boolean isWin() {
+        return false;
+    }
+
+    @Override
+    public boolean isOver() {
+        return false;
     }
 
     // TransferHandler to handle dragging the card's value (text)
@@ -220,9 +246,12 @@ public class OrderGameView extends JPanel {
         if (allFilled) {
             if (model.checkOrder(slotValues)) { // Pass the slot values to checkOrder
                 messageLabel.setText("You Win!");
+                win = true;
             } else {
                 messageLabel.setText("You Lose!"); // Notify the user of loss
+                win = false;
             }
+            over = true;
         }
     }
 }
