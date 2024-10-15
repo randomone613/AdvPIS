@@ -97,11 +97,11 @@ public class WastedWarsController {
                 System.out.println("Starting mini-game: " + miniGame);
                 break;
             case "Question For A Shot":
-                new GameWindow(model, "Question For A Shot");
+                new GameWindow(model, "QFAS"); // Match the key used in CardLayout
                 System.out.println("Starting mini-game: " + miniGame);
                 break;
             case "Twisted Fingers":
-                new GameWindow(model, "Twisted Fingers");
+                new GameWindow(model, "TF"); // Use "TF" instead of "Twisted Fingers"
                 System.out.println("Starting mini-game: " + miniGame);
                 break;
             default:
