@@ -172,7 +172,7 @@ public class GameWindow {
     }
 
     private void startSelectedGame(String miniGame) {
-        // Show the selected mini game
+        // Show the selected mini game using the correct key
         cardLayout.show(miniGamePanel, miniGame);
 
         // Start the selected mini game
