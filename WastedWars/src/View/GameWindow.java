@@ -21,6 +21,8 @@ public class GameWindow {
     private CardLayout cardLayout; // CardLayout for switching mini games
     private int currentTurnIndex = 0; // Index of the current player turn
     private final int TARGET_SIPS = 10; // Target sips to win
+    private String currentMiniGame;
+
     private QFASModel QFASmodel;
     private OrderGameModel OrderGamemodel;
 
@@ -151,43 +153,49 @@ public class GameWindow {
     }
 
     private void startTurn() {
-        // Array of mini game names corresponding to their CardLayout identifiers
-        String[] miniGameNames = {"OrderGame", "Question For A Shot", "Twisted Fingers"};
+        String[] miniGameNames = {"OrderGame", "QFAS", "TF"};
 
-        // Select a random mini game
+        // Select a random mini-game
         String selectedGame = miniGameNames[new Random().nextInt(miniGameNames.length)];
+        currentMiniGame = selectedGame;  // Track the current mini-game
 
-        // Show the selected mini game
+        // Show the selected mini-game
         cardLayout.show(miniGamePanel, selectedGame);
 
-        // Start the selected mini game
-        Component selectedComponent = getCurrentMiniGameComponent(selectedGame);
+        // Start the selected mini-game
+        Component selectedComponent = getCurrentMiniGameComponent();
         if (selectedComponent instanceof MiniGame) {
             MiniGame miniGame = (MiniGame) selectedComponent;
             miniGame.startGame();  // Start the mini-game logic
         }
 
-        // Show current player's turn in a dialog
-        JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + "'s turn! Play the mini game.");
+        JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + "'s turn! Play the mini-game.");
+
+        if (selectedComponent instanceof MiniGame){
+            MiniGame miniGame = (MiniGame) selectedComponent;
+            if (miniGame.isOver()){
+                processOutcome();
+            }
+        }
     }
 
     private void startSelectedGame(String miniGame) {
-        // Show the selected mini game using the correct key
+        currentMiniGame = miniGame;  // Track the current mini-game
         cardLayout.show(miniGamePanel, miniGame);
 
-        // Start the selected mini game
-        Component selectedComponent = getCurrentMiniGameComponent(miniGame);
+        // Start the selected mini-game
+        Component selectedComponent = getCurrentMiniGameComponent();
         if (selectedComponent instanceof MiniGame) {
             MiniGame miniGameInstance = (MiniGame) selectedComponent;
             miniGameInstance.startGame();  // Start the mini-game logic
         }
 
-        // Show current player's turn in a dialog
-        JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + "'s turn! Play the mini game.");
+        JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + "'s turn! Play the mini-game.");
     }
 
+
     public void processOutcome() {
-        Component selectedComponent = getCurrentMiniGameComponent(null);  // Get the active mini-game
+        Component selectedComponent = getCurrentMiniGameComponent();  // Get the active mini-game
         if (selectedComponent instanceof MiniGame) {
             MiniGame miniGame = (MiniGame) selectedComponent;
 
@@ -205,6 +213,7 @@ public class GameWindow {
                 JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + " loses the mini game! They gain 1 sip.");
                 currentPlayer.addSip(1);
             }
+            frame.repaint();
         }
 
         // Check for game end
@@ -217,14 +226,18 @@ public class GameWindow {
     }
 
     // Helper method to get the currently visible mini-game component
-    private Component getCurrentMiniGameComponent(String miniGameName) {
+    private Component getCurrentMiniGameComponent() {
         for (Component comp : miniGamePanel.getComponents()) {
-            if (miniGamePanel.isAncestorOf(comp) && comp.isVisible()) {
-                return comp;
+            if (miniGamePanel.isAncestorOf(comp) && miniGamePanel.getComponentZOrder(comp) == 0) {
+                // Compare with currentMiniGame to ensure it's the right component
+                if (comp instanceof MiniGame && currentMiniGame.equals(comp.getName())) {
+                    return comp;
+                }
             }
         }
         return null;
     }
+
 
     // Check if any player has reached the target sips
     private void checkGameEnd() {
@@ -235,6 +248,15 @@ public class GameWindow {
                 return;
             }
         }
+    }
+
+    public boolean isMiniGameWon() {
+        Component selectedComponent = getCurrentMiniGameComponent();
+        if (selectedComponent instanceof MiniGame) {
+            MiniGame miniGame = (MiniGame) selectedComponent;
+            return miniGame.isWin();
+        }
+        return false;
     }
 
     public JFrame getFrame() {

@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.List;
 
 public class WastedWarsView {
+    private static final int MAX_PLAYERS = 6;  // Maximum number of players allowed
     private WastedWarsModel model;
     private JFrame frame;
     private JPanel playerPanel;
@@ -80,7 +81,7 @@ public class WastedWarsView {
             addPlayerSquare(i, players.get(i).getUsername());
         }
 
-        addAddPlayerButton();  // Ensure the "Add Player" button is added last
+        addAddPlayerButton();  // Ensure the "Add Player" button is added last if possible
         playerPanel.revalidate();
         playerPanel.repaint();
     }
@@ -128,13 +129,15 @@ public class WastedWarsView {
     }
 
     private void addAddPlayerButton() {
-        if (addPlayerButton == null) {
-            addPlayerButton = new JButton("+ Add Player");
-            addPlayerButton.setPreferredSize(new Dimension(100, 100));
-        }
+        if (model.getPlayers().size() < MAX_PLAYERS) {  // Only add the button if less than MAX_PLAYERS
+            if (addPlayerButton == null) {
+                addPlayerButton = new JButton("+ Add Player");
+                addPlayerButton.setPreferredSize(new Dimension(100, 100));
+            }
 
-        gbcp.gridx = model.getPlayers().size(); // Update the gridx constraint
-        playerPanel.add(addPlayerButton, gbcp);  // Add "Add Player" button at the end
+            gbcp.gridx = model.getPlayers().size(); // Update the gridx constraint
+            playerPanel.add(addPlayerButton, gbcp);  // Add "Add Player" button at the end
+        }
     }
 
     public JButton getAddPlayerButton() {
@@ -148,7 +151,6 @@ public class WastedWarsView {
     public JButton getChooseModeButton() {
         return chooseModeButton;
     }
-
 
     public JFrame getFrame() {
         return frame;
