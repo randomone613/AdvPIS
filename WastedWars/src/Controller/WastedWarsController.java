@@ -20,7 +20,7 @@ public class WastedWarsController {
         this.view = view;
 
         // Assuming we have a list of available mini-games in the model
-        this.miniGames = List.of("OrderGame", "Question For A Shot", "Twisted Fingers"); // List of mini-games
+        this.miniGames = List.of("OrderGame", "Question For A Shot", "Twisted Fingers", "Decibel Challenge"); // List of mini-games
 
         // Random Mode button action
         view.getRandomModeButton().addActionListener(new ActionListener() {
@@ -102,6 +102,10 @@ public class WastedWarsController {
                 break;
             case "Twisted Fingers":
                 new GameWindow(model, "TF"); // Use "TF" instead of "Twisted Fingers"
+                System.out.println("Starting mini-game: " + miniGame);
+                break;
+            case "Decibel Challenge":
+                new GameWindow(model, "DecibelChallenge");
                 System.out.println("Starting mini-game: " + miniGame);
                 break;
             default:

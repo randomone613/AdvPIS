@@ -1,5 +1,7 @@
 package WastedWars.src.View;
 
+import WastedWars.src.MiniGames.DecibelChallenge.DecibelChallengeModel;
+import WastedWars.src.MiniGames.DecibelChallenge.DecibelChallengeView;
 import WastedWars.src.MiniGames.OrderGame.OrderGameModel;
 import WastedWars.src.MiniGames.OrderGame.OrderGameView;
 import WastedWars.src.MiniGames.QFAS.QFASModel;
@@ -25,6 +27,7 @@ public class GameWindow {
 
     private QFASModel QFASmodel;
     private OrderGameModel OrderGamemodel;
+    private DecibelChallengeModel decibelModel;
 
     // Original constructor
     public GameWindow(WastedWarsModel model) {
@@ -61,6 +64,9 @@ public class GameWindow {
         miniGamePanel.add(new OrderGameView(OrderGamemodel), "OrderGame"); // Add OrderGame mini-game
 
         miniGamePanel.add(new TFView(), "TF"); // Add TF mini-game
+
+        decibelModel = new DecibelChallengeModel();
+        miniGamePanel.add(new DecibelChallengeView(decibelModel), "DecibelChallenge");
 
         // Position the mini-game panel at the top-left (2/3 width and height)
         gbc.gridx = 0;
