@@ -14,6 +14,7 @@ import WastedWars.src.Controller.WastedWarsController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -81,7 +82,7 @@ public class GameWindow {
 
         decibelModel = new DecibelChallengeModel();
         DecibelChallengeView decibelView = new DecibelChallengeView(decibelModel);
-        //miniGamesMap.put("DecibelChallenge", decibelView);
+        miniGamesMap.put("DecibelChallenge", decibelView);
         miniGamePanel.add(decibelView, "DecibelChallenge");
 
         // Position the mini-game panel at the top-left (2/3 width and height)
@@ -236,11 +237,12 @@ public class GameWindow {
         miniGamePanel.revalidate();
         miniGamePanel.repaint();
 
+        System.out.println("Starting selected game: " + miniGame);
         startMiniGame(); // Start the mini-game logic
     }
 
     private void startTurn() {
-        String[] miniGameNames = {"OrderGame", "QFAS", "TF"};
+        String[] miniGameNames = {"OrderGame", "QFAS", "TF", "DecibelChallenge"};
 
         // Select a random mini-game
         String selectedGame = miniGameNames[new Random().nextInt(miniGameNames.length)];
@@ -278,11 +280,11 @@ public class GameWindow {
                 frame.repaint();
             }
 
-            // Check for game end
-            checkGameEnd();
-
             // Move to the next player's turn
             nextTurn();
+
+            // Check for game end
+            checkGameEnd();
         }
     }
 
@@ -371,19 +373,51 @@ public class GameWindow {
         return miniGamesMap.get(currentMiniGame);  // Fetch the component based on the current mini-game key
     }
 
-
-
     // Check if any player has reached the target sips
     private void checkGameEnd() {
         for (Player player : model.getPlayers()) {
             if (player.getSip() >= TARGET_SIPS) {
-                JOptionPane.showMessageDialog(frame, player.getUsername() + " has reached " + TARGET_SIPS + " sips and wins the game!");
+                JOptionPane.showMessageDialog(frame, player.getUsername() + " has reached " + TARGET_SIPS + " sips and loses the game!");
                 frame.dispose(); // Close the game window
                 resetGame();
                 return;
             }
         }
     }
+
+    /*
+    private void checkGameEnd() {
+        java.util.List<Player> winners = new ArrayList<>();
+        int minSips = Integer.MAX_VALUE; // Start with the maximum possible value
+        Player looser = null;
+        
+        for (Player player : model.getPlayers()) {
+            int sips = player.getSip();
+            if (sips >= TARGET_SIPS) {
+                looser = player;
+            } else if (sips < minSips) {
+                minSips = sips; // Update minSips if a lower value is found
+                winners.clear(); // Clear previous winners
+                winners.add(player); // Add the new winner
+            } else if (sips == minSips) {
+                winners.add(player); // Add this player as well if they tie
+            }
+        }
+
+        // If we have winners, display the message and reset the game
+        if (!winners.isEmpty() && looser != null) {
+            StringBuilder message = new StringBuilder(looser.getUsername() + " has reached " + TARGET_SIPS + " sips and lost the game ! ");
+            for (Player winner : winners) {
+                message.append(winner.getUsername()).append(", "); // Append usernames
+            }
+            message.append("have the least amount of sips and won the game!");
+            JOptionPane.showMessageDialog(frame, message.toString());
+
+            frame.dispose(); // Close the game window
+            resetGame();
+        }
+    }
+     */
 
     public void resetGame() {
         stopAndResetTimer(); // Stop and reset the timer when resetting the game
