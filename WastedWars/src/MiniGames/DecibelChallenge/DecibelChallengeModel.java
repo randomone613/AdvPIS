@@ -33,6 +33,11 @@ public class DecibelChallengeModel implements MiniGame {
         }
     }
 
+    @Override
+    public void resetGame() {
+        startGame();
+    }
+
     // Continuously check the sound level to determine win/loss
     public void checkSoundLevel() {
         float currentLevel = soundDetector.getSoundLevel();
