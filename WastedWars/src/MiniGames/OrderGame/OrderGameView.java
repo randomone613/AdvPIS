@@ -113,6 +113,53 @@ public class OrderGameView extends JPanel implements MiniGame {
     }
 
     @Override
+    public void resetGame(){
+        messageLabel.setText("");
+        orderLabel = new JLabel("Order: " + (model.isAscending() ? "Ascending" : "Descending"), SwingConstants.CENTER);
+
+        for (JLabel slot : model.getSlotLabels()) {
+            slot.setText("");
+            slot.setTransferHandler(new ValueImportTransferHandler());
+        }
+
+        // Clear old cards from cardPanel
+        cardPanel.removeAll();
+        cardPanel.revalidate();
+        cardPanel.repaint();
+
+        Random random = new Random();
+        for (JButton card : model.getCardValues()) {
+            card.setPreferredSize(new Dimension(CARD_SIZE, CARD_SIZE)); // Set fixed size for cards
+            card.setTransferHandler(new ValueExportTransferHandler()); // Enable drag and drop
+            card.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    JButton button = (JButton) e.getSource();
+                    TransferHandler handler = button.getTransferHandler();
+                    handler.exportAsDrag(button, e, TransferHandler.MOVE); // Use MOVE instead of COPY
+                }
+            });
+
+            // Generate random positions around the slotPanel area
+            int xPos, yPos;
+            do {
+                xPos = random.nextInt((Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - CARD_SIZE);
+                yPos = random.nextInt((Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - CARD_SIZE);
+            } while (isOverlappingSlotArea(xPos, yPos));  // Ensure cards aren't overlapping slots
+
+            card.setBounds(xPos, yPos, CARD_SIZE, CARD_SIZE);  // Set random position for the card
+            cardPanel.add(card);
+        }
+
+        win = false;
+        over = false;
+
+        // Revalidate and repaint the panel to reflect changes
+        cardPanel.revalidate();
+        cardPanel.repaint();
+    }
+
+    @Override
     public boolean isWin() {
         return win;  // Return the current win status
     }
