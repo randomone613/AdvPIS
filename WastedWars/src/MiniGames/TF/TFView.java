@@ -116,8 +116,20 @@ public class TFView extends JPanel implements MiniGame {
     }
 
     @Override
+    public void resetGame() {
+        model.resetPressedKeys(); // Reset the pressed keys in the model
+        this.resetKeys();         // Reset the visual keys
+        model.selectKeys(3);
+        controller.setGameOver(false); // Reset game-over state
+        controller.setWin(false);     // Reset win state
+        controller.updateView();      // Re-highlight the new required keys
+        displayMessage("");           // Clear the message label
+    }
+
+
+    @Override
     public boolean isWin() {
-        return controller.getwin();
+        return controller.getWin();
     }
 
     @Override

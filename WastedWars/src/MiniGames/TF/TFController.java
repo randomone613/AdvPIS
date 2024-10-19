@@ -22,7 +22,7 @@ public class TFController {
         updateView();
     }
 
-    private void updateView() {
+    public void updateView() {
         view.resetKeys(); // Reset any previous highlights
         for (String key : model.getRequiredKeys()) {
             boolean isRightHand = model.isRightHand(key);
@@ -39,41 +39,67 @@ public class TFController {
 
             String pressedKey = KeyEvent.getKeyText(e.getKeyCode()).toUpperCase();
 
+            // If the key is correct but has already been pressed, do nothing
+            if (model.getPressedKeys().contains(pressedKey)) {
+                return; // Ignore repeated key presses
+            }
+
             // If the pressed key is not part of the required keys, the game is lost
             if (!model.getRequiredKeys().contains(pressedKey)) {
-                view.displayMessage("You Lose!");
+                view.displayMessage("You Lose!"); // Display loss message
                 gameOver = true; // Mark the game as over
                 win = false;
-
-                // Notify the listener that the game is finished
                 view.notifyGameFinish();
                 return;
             }
 
-            // Add the pressed key to the model (if it hasn't already been pressed)
+            // Add the pressed key to the model
             model.addPressedKey(pressedKey);
 
-            // After each correct key press, check if the game is won
+            // Update the view after each key press
+            updateView();
+
+            // Check if all required keys are held down simultaneously
+            checkWinCondition();
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if (gameOver) {
+                return;
+            }
+
+            String releasedKey = KeyEvent.getKeyText(e.getKeyCode()).toUpperCase();
+            // Remove the released key from pressedKeys
+            model.removePressedKey(releasedKey);
+
+            // Recheck the state of the game if a key is released
             checkWinCondition();
         }
     }
 
     private void checkWinCondition() {
-        if (model.isGameWon()) {
+        // Only win if all required keys are currently pressed
+        if (model.areAllKeysPressed()) {
             view.displayMessage("You Win!");
-            gameOver = true; // Mark the game as over
+            gameOver = true;
             win = true;
-
-            // Notify the listener that the game is finished
             view.notifyGameFinish();
         }
     }
 
-    public boolean getwin(){
+
+    public boolean getWin(){
         return win;
+    }
+    public void setWin(boolean b){
+        win = b;
     }
 
     public boolean getGameOver(){
         return gameOver;
+    }
+    public void setGameOver(boolean b){
+        gameOver = b;
     }
 }

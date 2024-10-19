@@ -23,7 +23,9 @@ public class TFModel {
     }
 
     // Method to randomly select keys from both hands
-    private void selectKeys(int keyCount) {
+    public void selectKeys(int keyCount) {
+        requiredKeys = new ArrayList<>();
+
         // Determine how many keys to select for each hand (2 or 3 keys)
         int leftHandCount = 2 + random.nextInt(2); // Randomly select 2 or 3 for the left hand
         int rightHandCount = 2 + random.nextInt(2); // Randomly select 2 or 3 for the right hand
@@ -60,5 +62,21 @@ public class TFModel {
 
     public boolean isGameWon() {
         return pressedKeys.containsAll(requiredKeys);
+    }
+
+    public List<String> getPressedKeys() {
+        return pressedKeys;
+    }
+
+    public void removePressedKey(String key) {
+        pressedKeys.remove(key); // Remove key when it is released
+    }
+
+    public boolean areAllKeysPressed() {
+        return pressedKeys.containsAll(requiredKeys); // Check if all required keys are being pressed
+    }
+
+    public void resetPressedKeys() {
+        pressedKeys.clear(); // Clear pressed keys list during reset
     }
 }

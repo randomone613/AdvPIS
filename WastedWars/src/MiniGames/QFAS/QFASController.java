@@ -23,11 +23,11 @@ public class QFASController {
                 String userAnswer = view.getResponse();
                 String trueAnswer = model.selectedAnswer;
                 if (Objects.equals(userAnswer, trueAnswer)) {
-                    view.setQuestionLabel("Bravo bg<3");
+                    view.setQuestionLabel("Good guess !");
                     win = true;
                     over = true;
                 } else {
-                    view.setQuestionLabel("Loupé :( allez BOIS");
+                    view.setQuestionLabel("Wrong ! Too bad, take a shot !");
                     win = false;
                     over = true;
                 }
@@ -48,8 +48,14 @@ public class QFASController {
     public boolean getwin(){
         return win;
     }
+    public void setWin(boolean b){
+        win = b;
+    }
 
     public boolean getOver(){
         return over;
+    }
+    public void setOver(boolean b){
+        over = b;
     }
 }

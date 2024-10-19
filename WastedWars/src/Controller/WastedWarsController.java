@@ -94,19 +94,19 @@ public class WastedWarsController {
         switch (miniGame) {
             case "OrderGame":
                 new GameWindow(model, this, "OrderGame");
-                System.out.println("Starting mini-game: " + miniGame);
+                //System.out.println("Starting mini-game: " + miniGame);
                 break;
             case "Question For A Shot":
                 new GameWindow(model, this,"QFAS"); // Match the key used in CardLayout
-                System.out.println("Starting mini-game: " + miniGame);
+                //System.out.println("Starting mini-game: " + miniGame);
                 break;
             case "Twisted Fingers":
                 new GameWindow(model,this, "TF"); // Use "TF" instead of "Twisted Fingers"
-                System.out.println("Starting mini-game: " + miniGame);
+                //System.out.println("Starting mini-game: " + miniGame);
                 break;
             case "Decibel Challenge":
                 new GameWindow(model,this,  "DecibelChallenge");
-                System.out.println("Starting mini-game: " + miniGame);
+                //System.out.println("Starting mini-game: " + miniGame);
                 break;
             default:
                 JOptionPane.showMessageDialog(view.getFrame(), "Game not available!", "Error", JOptionPane.ERROR_MESSAGE);

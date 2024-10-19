@@ -81,7 +81,7 @@ public class GameWindow {
 
         decibelModel = new DecibelChallengeModel();
         DecibelChallengeView decibelView = new DecibelChallengeView(decibelModel);
-        miniGamesMap.put("DecibelChallenge", decibelView);
+        //miniGamesMap.put("DecibelChallenge", decibelView);
         miniGamePanel.add(decibelView, "DecibelChallenge");
 
         // Position the mini-game panel at the top-left (2/3 width and height)
@@ -108,10 +108,12 @@ public class GameWindow {
         quitGame.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to quit?", "Quit Game", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                resetGame();
+                stopAndResetTimer(); // Stop and reset the countdown timer
+                resetGame(); // Reset the game
                 frame.dispose(); // Close the game window
             }
         });
+
 
         // Add Quit Game button to the first row of the GridLayout
         currentPlayerPanel.add(quitGame);
@@ -181,57 +183,42 @@ public class GameWindow {
         frame.setVisible(true);
     }
 
-    private void startTurn() {
-        String[] miniGameNames = {"OrderGame", "QFAS", "TF", "DecibelChallenge"};
+    public void startMiniGame() {
+        // Stop the previous timer before starting a new one
+        stopAndResetTimer(); // Ensure no other timers are running
 
-        // Select a random mini-game
-        String selectedGame = miniGameNames[new Random().nextInt(miniGameNames.length)];
-        currentMiniGame = selectedGame;  // Track the current mini-game
-
-        // Show the selected mini-game
-        cardLayout.show(miniGamePanel, selectedGame);
-        frame.repaint();
-
-        startMiniGame();
-    }
-
-    public void startMiniGame(){
-        // Start the selected mini-game
         Component selectedComponent = getCurrentMiniGameComponent();
         if (selectedComponent instanceof MiniGame) {
             MiniGame miniGame = (MiniGame) selectedComponent;
-            miniGame.startGame();  // Start the mini-game logic
 
-            // Show dialog for player's turn, but don't immediately call processOutcome()
+            // Reset the game before starting to ensure clean state
+            miniGame.resetGame();
+
+            // Dialog for player's turn
             JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + "'s turn! Play the mini-game.");
 
-            // Initialize time remaining and start a 30-second countdown
-            timeRemaining = 30; // 30 seconds countdown
-            updateTimerLabel(); // Update the timer label with the initial time
-
+            // Initialize time remaining and start the countdown
             countdownTimer = new Timer(1000, e -> {
                 timeRemaining--;
-                updateTimerLabel(); // Update the label with the remaining time
+                updateTimerLabel();
 
                 if (timeRemaining <= 0) {
                     ((Timer) e.getSource()).stop(); // Stop the countdown
                     if (!miniGame.isOver()) {
                         JOptionPane.showMessageDialog(frame, currentPlayer.getUsername() + " took too long! Mini game lost. You gain 1 sip.");
-                        currentPlayer.setSip(currentPlayer.getSip()+1);
+                        currentPlayer.setSip(currentPlayer.getSip() + 1);
                         nextTurn();
                     }
                 }
             });
 
-            countdownTimer.start(); // Start the 1-second countdown
+            countdownTimer.start(); // Start the timer
 
-            // Add a listener for when the game actually finishes
+            // Add a listener for when the game finishes
             miniGame.setGameFinishListener(() -> {
                 if (countdownTimer.isRunning()) {
-                    countdownTimer.stop(); // Stop the countdown if the game finishes early
+                    countdownTimer.stop();
                 }
-
-                // Call processOutcome to handle win/loss logic
                 processOutcome();
             });
         }
@@ -241,21 +228,32 @@ public class GameWindow {
         timerLabel.setText("Time Remaining: " + timeRemaining + "s");
     }
 
-    private void startSelectedGame(String miniGame) {
+    public void startSelectedGame(String miniGame) {
         currentMiniGame = miniGame;  // Track the current mini-game
+
+        // Revalidate and repaint to ensure layout and UI are refreshed
         cardLayout.show(miniGamePanel, miniGame);
+        miniGamePanel.revalidate();
+        miniGamePanel.repaint();
 
-        // Start the selected mini-game
-        Component selectedComponent = getCurrentMiniGameComponent();
-        if (selectedComponent instanceof MiniGame) {
-            MiniGame miniGameInstance = (MiniGame) selectedComponent;
-            miniGameInstance.startGame();  // Start the mini-game logic
-        }
-        frame.repaint();
-
-        startMiniGame();
+        startMiniGame(); // Start the mini-game logic
     }
 
+    private void startTurn() {
+        String[] miniGameNames = {"OrderGame", "QFAS", "TF"};
+
+        // Select a random mini-game
+        String selectedGame = miniGameNames[new Random().nextInt(miniGameNames.length)];
+        currentMiniGame = selectedGame;  // Track the current mini-game
+
+        // Show the selected mini-game immediately
+        cardLayout.show(miniGamePanel, selectedGame);
+        frame.revalidate();  // Ensure the frame refreshes
+        frame.repaint();
+
+        // Start the selected mini-game
+        startMiniGame();
+    }
 
     public void processOutcome() {
         Component selectedComponent = getCurrentMiniGameComponent();  // Get the active mini-game
@@ -335,12 +333,18 @@ public class GameWindow {
         otherPlayersPanel.repaint();
     }
 
+    public void updateMiniGamePanel(String s){
+        cardLayout.show(miniGamePanel, s);
+    }
+
     public void updateWindow() {
         // Update the current player panel
         updateCurrentPlayerPanel();
 
         // Update the other players panel
         updateOtherPlayersPanel();
+
+        updateMiniGamePanel(currentMiniGame);
 
         // Show the next mini-game (either random or selected by the user)
         if (controller.getIsRandom()) {
@@ -351,6 +355,9 @@ public class GameWindow {
                     "Choose a Mini Game", "Choose Mini Game",
                     JOptionPane.QUESTION_MESSAGE, null, miniGameOptions, miniGameOptions[0]);
             startSelectedGame(selectedGame);
+
+            frame.revalidate();
+            frame.repaint();
         }
 
         // Reset the timer to 30 seconds for the new player
@@ -378,12 +385,21 @@ public class GameWindow {
         }
     }
 
-    public void resetGame(){
-        for (Player player : model.getPlayers()){
-            player.setSip(0);
+    public void resetGame() {
+        stopAndResetTimer(); // Stop and reset the timer when resetting the game
+        for (Player player : model.getPlayers()) {
+            player.setSip(0); // Reset all players' sip points
         }
-        currentPlayer = model.getPlayers().get(0);
+        currentPlayer = model.getPlayers().get(0); // Reset to the first player
         currentTurnIndex = 0;
+    }
+
+    private void stopAndResetTimer() {
+        if (countdownTimer != null && countdownTimer.isRunning()) {
+            countdownTimer.stop(); // Stop the existing timer if it's running
+        }
+        timeRemaining = 30; // Reset the time remaining
+        updateTimerLabel(); // Update the timer label with the new value
     }
 
     public JFrame getFrame() {

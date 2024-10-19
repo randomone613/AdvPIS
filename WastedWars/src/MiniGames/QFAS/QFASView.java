@@ -39,6 +39,7 @@ public class QFASView extends JPanel implements MiniGame {
         inputPanel.add(validateButton);
         add(inputPanel, BorderLayout.SOUTH);
 
+        // Initialize the controller
         controller = new QFASController(model, this);
     }
 
@@ -56,7 +57,22 @@ public class QFASView extends JPanel implements MiniGame {
 
     @Override
     public void startGame() {
+        // Recreate the controller and view to start fresh
         new QFASController(model, new QFASView(model));
+    }
+
+    @Override
+    public void resetGame() {
+        // 1. Reset the model's state (select new question/answer)
+        model.select_question();
+
+        // 2. Clear the response field and reset the question label
+        reponseField.setText(""); // Clear user input
+        questionLabel.setText(model.selectedQuestion); // Set new question
+
+        // 3. Reset the controller's state (flags like win/over)
+        controller.setOver(false); // Reset game over status
+        controller.setWin(false); // Reset win status
     }
 
     @Override
@@ -71,6 +87,6 @@ public class QFASView extends JPanel implements MiniGame {
 
     @Override
     public void setGameFinishListener(GameFinishListener listener) {
-        controller.setGameFinishListener(listener); // Pass the listener to the controller
+        controller.setGameFinishListener(listener); // Pass listener to the controller
     }
 }
