@@ -7,7 +7,7 @@ public class TFController {
     private TFModel model;
     private TFView view;
     private boolean gameOver = false; // To track game end state
-    private boolean win = false;
+    private boolean win;
 
     public TFController(TFModel model, TFView view) {
         this.model = model;
@@ -44,6 +44,9 @@ public class TFController {
                 view.displayMessage("You Lose!");
                 gameOver = true; // Mark the game as over
                 win = false;
+
+                // Notify the listener that the game is finished
+                view.notifyGameFinish();
                 return;
             }
 
@@ -60,6 +63,9 @@ public class TFController {
             view.displayMessage("You Win!");
             gameOver = true; // Mark the game as over
             win = true;
+
+            // Notify the listener that the game is finished
+            view.notifyGameFinish();
         }
     }
 

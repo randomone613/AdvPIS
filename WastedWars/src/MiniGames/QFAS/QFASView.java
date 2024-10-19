@@ -1,7 +1,7 @@
 package WastedWars.src.MiniGames.QFAS;
 
-import WastedWars.src.MiniGames.QFAS.QFASModel;
 import WastedWars.src.Model.MiniGame;
+import WastedWars.src.Model.GameFinishListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,11 +60,6 @@ public class QFASView extends JPanel implements MiniGame {
     }
 
     @Override
-    public void resetGame() {
-        startGame();
-    }
-
-    @Override
     public boolean isWin() {
         return controller.getwin();
     }
@@ -72,5 +67,10 @@ public class QFASView extends JPanel implements MiniGame {
     @Override
     public boolean isOver(){
         return controller.getOver();
+    }
+
+    @Override
+    public void setGameFinishListener(GameFinishListener listener) {
+        controller.setGameFinishListener(listener); // Pass the listener to the controller
     }
 }

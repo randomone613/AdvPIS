@@ -21,7 +21,7 @@ public class Player {
         return sip;
     }
 
-    public void addSip(int x){
-        sip += x;
+    public void setSip(int x){
+        sip = x;
     }
 }

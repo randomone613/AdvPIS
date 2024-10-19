@@ -1,5 +1,6 @@
 package WastedWars.src.MiniGames.DecibelChallenge;
 
+import WastedWars.src.Model.GameFinishListener;
 import WastedWars.src.Model.MiniGame;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -10,6 +11,7 @@ public class DecibelChallengeModel implements MiniGame {
     private boolean isWon = false;
 
     private SoundLevelDetector soundDetector;
+    private GameFinishListener gameFinishListener; // Add the listener reference
 
     public DecibelChallengeModel() {
         try {
@@ -31,21 +33,19 @@ public class DecibelChallengeModel implements MiniGame {
         }
     }
 
-    @Override
-    public void resetGame() {
-
-    }
-
     // Continuously check the sound level to determine win/loss
     public void checkSoundLevel() {
         float currentLevel = soundDetector.getSoundLevel();
         if (currentLevel >= WIN_THRESHOLD) {
             isWon = true;
             isGameOver = true;
+            if (gameFinishListener != null) {
+                gameFinishListener.onGameFinished(); // Notify listener of win
+            }
         }
     }
 
-    public float getSoundLevel(){
+    public float getSoundLevel() {
         return soundDetector.getSoundLevel();
     }
 
@@ -53,6 +53,11 @@ public class DecibelChallengeModel implements MiniGame {
     public boolean isOver() {
         soundDetector.stopCapturing();
         return isGameOver;
+    }
+
+    @Override
+    public void setGameFinishListener(GameFinishListener listener) {
+        this.gameFinishListener = listener; // Assign the listener
     }
 
     @Override

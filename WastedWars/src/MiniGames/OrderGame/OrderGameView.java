@@ -1,5 +1,6 @@
 package WastedWars.src.MiniGames.OrderGame;
 
+import WastedWars.src.Model.GameFinishListener;
 import WastedWars.src.Model.MiniGame;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class OrderGameView extends JPanel implements MiniGame {
 
     private boolean win = false;
     private boolean over = false;
+    private GameFinishListener gameFinishListener;  // Add the listener reference
 
     public OrderGameView(OrderGameModel model) {
         this.model = model;
@@ -111,18 +113,18 @@ public class OrderGameView extends JPanel implements MiniGame {
     }
 
     @Override
-    public void resetGame() {
-        startGame();
-    }
-
-    @Override
     public boolean isWin() {
-        return false;
+        return win;  // Return the current win status
     }
 
     @Override
     public boolean isOver() {
-        return false;
+        return over;  // Return true if the game is not over (i.e., win or lose)
+    }
+
+    @Override
+    public void setGameFinishListener(GameFinishListener listener) {
+        this.gameFinishListener = listener;  // Assign the listener
     }
 
     // TransferHandler to handle dragging the card's value (text)
@@ -252,6 +254,9 @@ public class OrderGameView extends JPanel implements MiniGame {
                 win = false;
             }
             over = true;
+            if (gameFinishListener != null) {
+                gameFinishListener.onGameFinished();  // Notify listener of game loss
+            }
         }
     }
 }

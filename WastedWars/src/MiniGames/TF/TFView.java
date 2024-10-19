@@ -1,5 +1,6 @@
 package WastedWars.src.MiniGames.TF;
 
+import WastedWars.src.Model.GameFinishListener;
 import WastedWars.src.Model.MiniGame;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ public class TFView extends JPanel implements MiniGame {
     private JLabel messageLabel;
     private TFController controller;
     private TFModel model;
+    private GameFinishListener finishListener;  // Field to store the finish listener
 
     public TFView() {
         setLayout(new GridBagLayout()); // Using GridBagLayout for custom layout
@@ -109,13 +111,8 @@ public class TFView extends JPanel implements MiniGame {
     @Override
     public void startGame() {
         TFModel model = new TFModel(3);
-        TFView View = new TFView();
-        TFController TFController = new TFController(model, View);
-    }
-
-    @Override
-    public void resetGame() {
-        startGame();
+        TFView view = new TFView();
+        TFController controller = new TFController(model, view);
     }
 
     @Override
@@ -126,5 +123,17 @@ public class TFView extends JPanel implements MiniGame {
     @Override
     public boolean isOver(){
         return controller.getGameOver();
+    }
+
+    @Override
+    public void setGameFinishListener(GameFinishListener listener) {
+        this.finishListener = listener;  // Store the listener
+    }
+
+    // Method to notify that the game is finished
+    public void notifyGameFinish() {
+        if (finishListener != null) {
+            finishListener.onGameFinished();
+        }
     }
 }
