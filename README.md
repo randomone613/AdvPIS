@@ -1,4 +1,4 @@
-# AdvPIS
+# Advanced Programming of Interactive Systems Project : Wasted Wars
 
 # Game rules:
 
