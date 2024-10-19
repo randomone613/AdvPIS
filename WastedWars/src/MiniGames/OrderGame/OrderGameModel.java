@@ -37,6 +37,14 @@ public class OrderGameModel {
         return cardValues;
     }
 
+    public void setCardValues(List<Integer> values) {
+        // Ensure we are replacing values for the existing JButton instances
+        for (int i = 0; i < Math.min(cardValues.size(), values.size()); i++) {
+            // Set the text of the existing JButton to the new value
+            cardValues.get(i).setText(String.valueOf(values.get(i)));
+        }
+    }
+
     // Getter for the slot labels (JLabel)
     public List<JLabel> getSlotLabels() {
         return slotLabels;

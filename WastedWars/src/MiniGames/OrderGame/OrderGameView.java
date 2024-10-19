@@ -10,6 +10,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class OrderGameView extends JPanel implements MiniGame {
@@ -128,6 +130,11 @@ public class OrderGameView extends JPanel implements MiniGame {
         cardPanel.repaint();
 
         Random random = new Random();
+        List<Integer> newCardValues = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            newCardValues.add((int) (Math.random() * 100)); // Random values
+        }
+        model.setCardValues(newCardValues);
         for (JButton card : model.getCardValues()) {
             card.setPreferredSize(new Dimension(CARD_SIZE, CARD_SIZE)); // Set fixed size for cards
             card.setTransferHandler(new ValueExportTransferHandler()); // Enable drag and drop
