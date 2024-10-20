@@ -35,7 +35,22 @@ public class DecibelChallengeModel implements MiniGame {
 
     @Override
     public void resetGame() {
+        // Stop any ongoing sound capturing first
+        if (soundDetector != null) {
+            soundDetector.stopCapturing();
+        }
+
+        // Reset the game state flags
+        isGameOver = false;
+        isWon = false;
+
+        // Start capturing sound again
         startGame();
+
+        // Notify listeners that the game has been reset (if necessary)
+        if (gameFinishListener != null) {
+            gameFinishListener.onGameFinished();
+        }
     }
 
     // Continuously check the sound level to determine win/loss

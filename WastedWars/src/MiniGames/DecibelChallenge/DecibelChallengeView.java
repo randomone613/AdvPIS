@@ -45,7 +45,7 @@ public class DecibelChallengeView extends JPanel {
 
     private void updateVolumeBar() {
         float soundLevel = model.getSoundLevel();
-        int progress = (int) Math.min(100, soundLevel); // Convert sound level to a percentage
+        int progress = (int) Math.min(100, soundLevel); // Limit progress to 100%
         volumeBar.setValue(progress);
         volumeBar.setString("Volume: " + progress + " dB");
     }
@@ -59,31 +59,4 @@ public class DecibelChallengeView extends JPanel {
         }
     }
 
-    // Custom progress bar class to add a target threshold line
-    private class CustomProgressBar extends JProgressBar {
-        private float winThreshold; // The win threshold in decibels
-
-        public CustomProgressBar(int min, int max, float winThreshold) {
-            super(min, max);
-            this.winThreshold = winThreshold;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-
-            // Calculate the position of the win threshold
-            int barWidth = getWidth();
-            int barHeight = getHeight();
-            int thresholdPosition = (int) ((winThreshold / getMaximum()) * barWidth);
-
-            // Draw a vertical line to indicate the win threshold
-            g.setColor(Color.GREEN);  // Color of the threshold indicator
-            g.drawLine(thresholdPosition, 0, thresholdPosition, barHeight);
-
-            // Draw a label to indicate the threshold level
-            g.setColor(Color.BLACK);
-            g.drawString("Target: " + (int) winThreshold + " dB", thresholdPosition - 30, barHeight / 2);
-        }
-    }
 }

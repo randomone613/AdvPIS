@@ -237,7 +237,6 @@ public class GameWindow {
         miniGamePanel.revalidate();
         miniGamePanel.repaint();
 
-        System.out.println("Starting selected game: " + miniGame);
         startMiniGame(); // Start the mini-game logic
     }
 
@@ -357,9 +356,6 @@ public class GameWindow {
                     "Choose a Mini Game", "Choose Mini Game",
                     JOptionPane.QUESTION_MESSAGE, null, miniGameOptions, miniGameOptions[0]);
             startSelectedGame(selectedGame);
-
-            frame.revalidate();
-            frame.repaint();
         }
 
         // Reset the timer to 30 seconds for the new player
@@ -384,40 +380,6 @@ public class GameWindow {
             }
         }
     }
-
-    /*
-    private void checkGameEnd() {
-        java.util.List<Player> winners = new ArrayList<>();
-        int minSips = Integer.MAX_VALUE; // Start with the maximum possible value
-        Player looser = null;
-        
-        for (Player player : model.getPlayers()) {
-            int sips = player.getSip();
-            if (sips >= TARGET_SIPS) {
-                looser = player;
-            } else if (sips < minSips) {
-                minSips = sips; // Update minSips if a lower value is found
-                winners.clear(); // Clear previous winners
-                winners.add(player); // Add the new winner
-            } else if (sips == minSips) {
-                winners.add(player); // Add this player as well if they tie
-            }
-        }
-
-        // If we have winners, display the message and reset the game
-        if (!winners.isEmpty() && looser != null) {
-            StringBuilder message = new StringBuilder(looser.getUsername() + " has reached " + TARGET_SIPS + " sips and lost the game ! ");
-            for (Player winner : winners) {
-                message.append(winner.getUsername()).append(", "); // Append usernames
-            }
-            message.append("have the least amount of sips and won the game!");
-            JOptionPane.showMessageDialog(frame, message.toString());
-
-            frame.dispose(); // Close the game window
-            resetGame();
-        }
-    }
-     */
 
     public void resetGame() {
         stopAndResetTimer(); // Stop and reset the timer when resetting the game
