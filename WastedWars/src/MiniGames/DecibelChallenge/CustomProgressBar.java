@@ -9,24 +9,30 @@ public class CustomProgressBar extends JProgressBar {
     public CustomProgressBar(int min, int max, float winThreshold) {
         super(min, max);
         this.winThreshold = winThreshold;
+        setOrientation(SwingConstants.VERTICAL); // Set the orientation to vertical
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Calculate the position of the win threshold relative to the bar's width
-        int barWidth = getWidth();
-        int thresholdPosition = (int) ((winThreshold / getMaximum()) * barWidth);
+        // Calculate the height of the bar based on the current value
+        int barHeight = getHeight();
+        int progressHeight = (int) ((getValue() / (float) getMaximum()) * barHeight);
 
-        // Draw the threshold line if within bounds
-        if (thresholdPosition >= 0 && thresholdPosition <= barWidth) {
-            g.setColor(Color.RED);  // Color of the threshold indicator
-            g.drawLine(thresholdPosition, 0, thresholdPosition, getHeight());
+        // Draw the filled portion of the progress bar
+        g.setColor(getForeground());
+        g.fillRect(0, barHeight - progressHeight, getWidth(), progressHeight);
+
+        // Draw the threshold line
+        int thresholdPosition = (int) ((winThreshold / getMaximum()) * barHeight);
+        if (thresholdPosition >= 0 && thresholdPosition <= barHeight) {
+            g.setColor(Color.RED);
+            g.drawLine(0, barHeight - thresholdPosition, getWidth(), barHeight - thresholdPosition);
         }
 
         // Draw a label to indicate the threshold level
         g.setColor(Color.BLACK);
-        g.drawString("Target: " + (int) winThreshold + " dB", thresholdPosition - 30, getHeight() / 2);
+        g.drawString("Target: " + (int) winThreshold + " dB", 5, barHeight - thresholdPosition - 5);
     }
 }
