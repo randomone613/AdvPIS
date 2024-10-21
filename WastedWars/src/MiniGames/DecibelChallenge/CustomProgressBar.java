@@ -9,7 +9,7 @@ public class CustomProgressBar extends JProgressBar {
     public CustomProgressBar(int min, int max, float winThreshold) {
         super(min, max);
         this.winThreshold = winThreshold;
-        setOrientation(SwingConstants.VERTICAL); // Set the orientation to vertical
+        setOrientation(SwingConstants.VERTICAL); // Keep the bar vertical
     }
 
     @Override
@@ -31,8 +31,30 @@ public class CustomProgressBar extends JProgressBar {
             g.drawLine(0, barHeight - thresholdPosition, getWidth(), barHeight - thresholdPosition);
         }
 
-        // Draw a label to indicate the threshold level
-        g.setColor(Color.BLACK);
-        g.drawString("Target: " + (int) winThreshold + " dB", 5, barHeight - thresholdPosition - 5);
+        // Correctly draw the progress percentage upright
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(getFont());
+
+        // Create a string for the percentage
+        String progressText = getValue() + "%";
+
+        // Measure text to center it
+        FontMetrics fm = g2d.getFontMetrics();
+        int textWidth = fm.stringWidth(progressText);
+        int textHeight = fm.getHeight();
+
+        // Calculate the x position (centered horizontally)
+        int x = (getWidth() - textWidth) / 2;
+
+        // Ensure y position stays within the bar and doesn't go out of bounds
+        int y = Math.max(textHeight, barHeight - progressHeight + (textHeight / 2));
+        y = Math.min(y, barHeight - 5); // Prevent text from going below the bar
+
+        // Draw the text upright at the calculated position
+        g2d.drawString(progressText, x, y);
+
+        // Dispose of the Graphics2D object
+        g2d.dispose();
     }
 }

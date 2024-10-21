@@ -7,24 +7,25 @@ import java.util.TimerTask;
 
 public class DecibelChallengeView extends JPanel {
     private DecibelChallengeModel model;
-    private CustomProgressBar volumeBar; // Use CustomProgressBar instead of JProgressBar
+    private CustomProgressBar volumeBar;
     private Timer timer;
 
     public DecibelChallengeView(DecibelChallengeModel model) {
         this.model = model;
         setLayout(new BorderLayout());
 
-        // Initialize the custom volume bar
+        // Initialize the custom volume bar, adjust its size
         volumeBar = new CustomProgressBar(0, 100, DecibelChallengeModel.WIN_THRESHOLD);
-        volumeBar.setStringPainted(true);
+        volumeBar.setStringPainted(false); // Disable default string painting
         volumeBar.setForeground(Color.RED);
-        volumeBar.setPreferredSize(new Dimension(300, 50));
+        volumeBar.setPreferredSize(new Dimension(50, 200)); // Adjusted to be smaller
 
         JLabel instructions = new JLabel("Scream loud enough to win!", SwingConstants.CENTER);
         instructions.setFont(new Font("Arial", Font.BOLD, 18));
 
+        // Add components, with the progress bar on the left side
         add(instructions, BorderLayout.NORTH);
-        add(volumeBar, BorderLayout.CENTER);
+        add(volumeBar, BorderLayout.WEST); // Put the bar on the left
     }
 
     public void startGame() {
@@ -47,7 +48,7 @@ public class DecibelChallengeView extends JPanel {
         float soundLevel = model.getSoundLevel();
         int progress = (int) Math.min(100, soundLevel); // Limit progress to 100%
         volumeBar.setValue(progress);
-        volumeBar.setString("Volume: " + progress + " dB");
+        // No need to call volumeBar.setString() anymore, as we are manually painting it
     }
 
     private void endGame() {
@@ -58,5 +59,4 @@ public class DecibelChallengeView extends JPanel {
             JOptionPane.showMessageDialog(this, "You lost! Scream louder next time.");
         }
     }
-
 }
