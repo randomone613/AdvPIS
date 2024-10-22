@@ -6,20 +6,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class OrderGameModel {
-    private List<JButton> cardValues;  // Cards that the player will sort
-    private List<JLabel> slotLabels;   // Slots where cards are dropped
-    private boolean ascendingOrder;     // Whether the sorting is ascending or descending
+    private List<JButton> cardValues;
+    private List<JLabel> slotLabels;
+    private boolean ascendingOrder;
 
     public OrderGameModel() {
-        // Initialize game with 5 cards having random values
         cardValues = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            int randomValue = (int) (Math.random() * 100);  // Random number between 0 and 99
+            int randomValue = (int) (Math.random() * 100);
             JButton card = new JButton(String.valueOf(randomValue));
             cardValues.add(card);
         }
 
-        // Initialize 5 empty slots
         slotLabels = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             JLabel slot = new JLabel("");
@@ -28,44 +26,36 @@ public class OrderGameModel {
             slotLabels.add(slot);
         }
 
-        // Randomly decide if the game is ascending or descending
         ascendingOrder = Math.random() > 0.5;
     }
 
-    // Getter for the card values (JButton)
     public List<JButton> getCardValues() {
         return cardValues;
     }
 
     public void setCardValues(List<Integer> values) {
-        // Ensure we are replacing values for the existing JButton instances
         for (int i = 0; i < Math.min(cardValues.size(), values.size()); i++) {
-            // Set the text of the existing JButton to the new value
             cardValues.get(i).setText(String.valueOf(values.get(i)));
         }
     }
 
-    // Getter for the slot labels (JLabel)
     public List<JLabel> getSlotLabels() {
         return slotLabels;
     }
 
-    // Getter for the order (ascending or descending)
     public boolean isAscending() {
         return ascendingOrder;
     }
 
-    // Check if the slots have been filled correctly and return the result
     public boolean checkOrder(String[] values) {
         List<Integer> slotValues = new ArrayList<>();
         for (String value : values) {
             if (value.isEmpty()) {
-                return false; // Slot is empty
+                return false;
             }
             slotValues.add(Integer.parseInt(value));
         }
 
-        // Check if the list is ordered correctly
         List<Integer> sortedValues = new ArrayList<>(slotValues);
         if (ascendingOrder) {
             Collections.sort(sortedValues);
@@ -73,6 +63,6 @@ public class OrderGameModel {
             Collections.sort(sortedValues, Collections.reverseOrder());
         }
 
-        return slotValues.equals(sortedValues);  // Compare current slots with sorted version
+        return slotValues.equals(sortedValues);
     }
 }

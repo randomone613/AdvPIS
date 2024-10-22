@@ -1,7 +1,7 @@
 package WastedWars.src.View;
 
-import WastedWars.src.MiniGames.DecibelChallenge.DecibelChallengeModel;
-import WastedWars.src.MiniGames.DecibelChallenge.DecibelChallengeView;
+//import WastedWars.src.MiniGames.DecibelChallenge.DecibelChallengeModel;
+//import WastedWars.src.MiniGames.DecibelChallenge.DecibelChallengeView;
 import WastedWars.src.MiniGames.OrderGame.OrderGameModel;
 import WastedWars.src.MiniGames.OrderGame.OrderGameView;
 import WastedWars.src.MiniGames.QFAS.QFASModel;
@@ -37,7 +37,7 @@ public class GameWindow {
 
     private QFASModel QFASmodel;
     private OrderGameModel OrderGamemodel;
-    private DecibelChallengeModel decibelModel;
+    //private DecibelChallengeModel decibelModel;
 
     private JLabel timerLabel;
     private Timer countdownTimer;
@@ -76,10 +76,12 @@ public class GameWindow {
         miniGamesMap.put("TF", tfView);
         miniGamePanel.add(tfView, "TF");
 
+        /*
         decibelModel = new DecibelChallengeModel();
         DecibelChallengeView decibelView = new DecibelChallengeView(decibelModel);
         miniGamesMap.put("DecibelChallenge", decibelView);
         miniGamePanel.add(decibelView, "DecibelChallenge");
+         */
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -216,7 +218,7 @@ public class GameWindow {
     }
 
     private void startTurn() {
-        String[] miniGameNames = {"OrderGame", "QFAS", "TF", "DecibelChallenge"};
+        String[] miniGameNames = {"OrderGame", "QFAS", "TF"};//, "DecibelChallenge"};
 
         String selectedGame = miniGameNames[new Random().nextInt(miniGameNames.length)];
         currentMiniGame = selectedGame;

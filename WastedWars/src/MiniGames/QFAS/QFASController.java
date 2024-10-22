@@ -10,7 +10,7 @@ public class QFASController {
     private QFASView view;
     private boolean win;
     private boolean over = false;
-    private GameFinishListener gameFinishListener; // Listener for game finish events
+    private GameFinishListener gameFinishListener;
 
     public QFASController(QFASModel model, QFASView view) {
         this.model = model;
@@ -32,7 +32,6 @@ public class QFASController {
                     over = true;
                 }
 
-                // Notify the listener that the game is finished
                 if (gameFinishListener != null) {
                     gameFinishListener.onGameFinished();
                 }
@@ -40,7 +39,6 @@ public class QFASController {
         });
     }
 
-    // Setter for the game finish listener
     public void setGameFinishListener(GameFinishListener listener) {
         this.gameFinishListener = listener;
     }

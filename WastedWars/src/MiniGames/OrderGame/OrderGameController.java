@@ -5,6 +5,8 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.List;
 
+//TODO no usage
+
 public class OrderGameController {
     private OrderGameModel model;
     private OrderGameView view;
@@ -18,7 +20,6 @@ public class OrderGameController {
         List<JButton> cardButtons = model.getCardValues();
         List<JLabel> slotLabels = model.getSlotLabels();
 
-        // Drag-and-Drop for cards
         for (JButton card : cardButtons) {
             card.setTransferHandler(new TransferHandler("text"));
             card.addMouseListener(new MouseAdapter() {
@@ -31,7 +32,6 @@ public class OrderGameController {
             });
         }
 
-        // Drop functionality for slots
         for (JLabel slot : slotLabels) {
             slot.setTransferHandler(new TransferHandler("text") {
                 @Override
@@ -47,7 +47,7 @@ public class OrderGameController {
                     try {
                         String data = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
                         JLabel slot = (JLabel) support.getComponent();
-                        slot.setText(data);  // Display card value on slot
+                        slot.setText(data);
                         return true;
                     } catch (Exception e) {
                         e.printStackTrace();

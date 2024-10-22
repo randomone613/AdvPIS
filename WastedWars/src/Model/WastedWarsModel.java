@@ -8,7 +8,6 @@ public class WastedWarsModel {
 
     public WastedWarsModel() {
         players = new ArrayList<>();
-        // Initially add two players, J1 and J2
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
     }

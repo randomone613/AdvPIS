@@ -1,10 +1,10 @@
 package WastedWars.src.MiniGames.QFAS;
+
 import java.util.*;
 import java.util.Random;
 import java.util.Map;
 
-//le but de ce mini jeu est d'afficher soit des questions de culture g ou des équations à résoudre
-public class QFASModel { //question for a shot
+public class QFASModel {
 
     private Map<String, String> questions = new HashMap<>();
     private Random random = new Random();
@@ -55,16 +55,16 @@ public class QFASModel { //question for a shot
 
     public void select_question() {
         Object[] quest_list = questions.keySet().toArray();
-        int index = random.nextInt(quest_list.length + 1);  // select a random question from the list
+        int index = random.nextInt(quest_list.length + 1);
 
-        if (index >= quest_list.length) {  // Use >= to avoid index out of bounds
-            int x = random.nextInt(8) + 2;  // Generates a random integer between 2 and 9
-            int y = random.nextInt(90) + 10;  // Generates a random integer between 10 and 99
-            selectedQuestion = x + " * " + y + " ?";  // Create the question string
-            selectedAnswer = String.valueOf(x * y);  // Calculate the answer and convert to String
+        if (index >= quest_list.length) {
+            int x = random.nextInt(8) + 2;
+            int y = random.nextInt(90) + 10;
+            selectedQuestion = x + " * " + y + " ?";
+            selectedAnswer = String.valueOf(x * y);
         } else {
-            selectedQuestion = (String) quest_list[index];  // Select a question from the predefined list
-            selectedAnswer = questions.get(selectedQuestion);  // Get the corresponding answer
+            selectedQuestion = (String) quest_list[index];
+            selectedAnswer = questions.get(selectedQuestion);
         }
     }
 }

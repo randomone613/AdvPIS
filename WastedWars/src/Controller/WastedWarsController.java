@@ -18,10 +18,9 @@ public class WastedWarsController {
         this.model = model;
         this.view = view;
 
-        this.miniGames = List.of("OrderGame", "Question For A Shot", "Twisted Fingers", "Decibel Challenge"); // List of mini-games
+        this.miniGames = List.of("OrderGame", "Question For A Shot", "Twisted Fingers");//, "Decibel Challenge");
 
-        // Setup the single "Start Game" button for random mode
-        view.getRandomModeButton().addActionListener(new ActionListener() {
+        view.getStartGameButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 startRandomMiniGame();
@@ -71,16 +70,14 @@ public class WastedWarsController {
             case "Twisted Fingers":
                 new GameWindow(model,this, "TF");
                 break;
+                /*
             case "Decibel Challenge":
                 new GameWindow(model,this,  "DecibelChallenge");
                 break;
+                 */
             default:
                 JOptionPane.showMessageDialog(view.getFrame(), "Game not available!", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
-    }
-
-    public List<String> getMiniGames(){
-        return miniGames;
     }
 }

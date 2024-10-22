@@ -7,44 +7,41 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TFView extends JPanel implements MiniGame {
-    private JLabel[] keys; // Labels representing keys on the keyboard
+    private JLabel[] keys;
     private JLabel messageLabel;
     private TFController controller;
     private TFModel model;
-    private GameFinishListener finishListener;  // Field to store the finish listener
+    private GameFinishListener finishListener;
 
     public TFView() {
-        setLayout(new GridBagLayout()); // Using GridBagLayout for custom layout
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        keys = new JLabel[30]; // Create 30 labels for AZERTY layout
+        keys = new JLabel[30];
 
-        // AZERTY keyboard keys layout
         String[] azertyKeys = {
                 "A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
                 "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
                 "W", "X", "C", "V", "B", "N", ",", ";", ":", "!"
         };
 
-        // Initialize labels for keys and add to the panel
         int index = 0;
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 10; col++) {
                 if (index < azertyKeys.length) {
                     keys[index] = new JLabel(azertyKeys[index], SwingConstants.CENTER);
                     keys[index].setFont(new Font("Arial", Font.BOLD, 18));
-                    keys[index].setOpaque(true); // To allow background color change
+                    keys[index].setOpaque(true);
                     keys[index].setBackground(Color.LIGHT_GRAY);
                     keys[index].setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-                    keys[index].setPreferredSize(new Dimension(50, 50)); // Size of each key
+                    keys[index].setPreferredSize(new Dimension(50, 50));
 
-                    // Set GridBag constraints for label placement
                     gbc.gridx = col;
                     gbc.gridy = row;
                     gbc.fill = GridBagConstraints.BOTH;
-                    gbc.weightx = 1.0; // Equal width for all labels
-                    gbc.weighty = 1.0; // Equal height for all labels
-                    gbc.insets = new Insets(5, 5, 5, 5); // Padding
+                    gbc.weightx = 1.0;
+                    gbc.weighty = 1.0;
+                    gbc.insets = new Insets(5, 5, 5, 5);
 
                     add(keys[index], gbc);
                     index++;
@@ -52,16 +49,14 @@ public class TFView extends JPanel implements MiniGame {
             }
         }
 
-        // Message label for win/loss messages
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 20));
         messageLabel.setForeground(Color.RED);
-        gbc.gridx = 0; // Reset position for the message
-        gbc.gridy = 5; // Place it below the keys
-        gbc.gridwidth = 10; // Span all columns
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 10;
         add(messageLabel, gbc);
 
-        // Legend for key colors
         addLegend(gbc);
 
         setFocusable(true);
@@ -74,15 +69,15 @@ public class TFView extends JPanel implements MiniGame {
     private void addLegend(GridBagConstraints gbc) {
         JLabel leftHandLegend = new JLabel("Left Hand: ");
         leftHandLegend.setForeground(new Color(77, 148, 255));
-        gbc.gridx = 0; // Reset position for the legend
-        gbc.gridy = 6; // Place it below the message
-        gbc.gridwidth = 5; // Span half of the columns
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 5;
         add(leftHandLegend, gbc);
 
         JLabel rightHandLegend = new JLabel("Right Hand: ");
         rightHandLegend.setForeground(new Color(255, 77, 77));
-        gbc.gridx = 5; // Position on the right half
-        gbc.gridwidth = 5; // Span the other half
+        gbc.gridx = 5;
+        gbc.gridwidth = 5;
         add(rightHandLegend, gbc);
     }
 
@@ -90,9 +85,9 @@ public class TFView extends JPanel implements MiniGame {
         for (JLabel label : keys) {
             if (label.getText().equals(key)) {
                 if (isRightHand) {
-                    label.setBackground(new Color(255, 77, 77)); // Highlight right-hand keys in red
+                    label.setBackground(new Color(255, 77, 77));
                 } else {
-                    label.setBackground(new Color(77, 148, 255)); // Highlight left-hand keys in blue
+                    label.setBackground(new Color(77, 148, 255));
                 }
             }
         }
@@ -100,7 +95,7 @@ public class TFView extends JPanel implements MiniGame {
 
     public void resetKeys() {
         for (JLabel label : keys) {
-            label.setBackground(Color.LIGHT_GRAY); // Reset label color
+            label.setBackground(Color.LIGHT_GRAY);
         }
     }
 
@@ -117,13 +112,13 @@ public class TFView extends JPanel implements MiniGame {
 
     @Override
     public void resetGame() {
-        model.resetPressedKeys(); // Reset the pressed keys in the model
-        this.resetKeys();         // Reset the visual keys
+        model.resetPressedKeys();
+        this.resetKeys();
         model.selectKeys(3);
-        controller.setGameOver(false); // Reset game-over state
-        controller.setWin(false);     // Reset win state
-        controller.updateView();      // Re-highlight the new required keys
-        displayMessage("");           // Clear the message label
+        controller.setGameOver(false);
+        controller.setWin(false);
+        controller.updateView();
+        displayMessage("");
     }
 
 
@@ -139,10 +134,9 @@ public class TFView extends JPanel implements MiniGame {
 
     @Override
     public void setGameFinishListener(GameFinishListener listener) {
-        this.finishListener = listener;  // Store the listener
+        this.finishListener = listener;
     }
 
-    // Method to notify that the game is finished
     public void notifyGameFinish() {
         if (finishListener != null) {
             finishListener.onGameFinished();

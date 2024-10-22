@@ -14,7 +14,7 @@ public class WastedWarsView {
     private JPanel playerPanel;
     private JButton addPlayerButton;
     private GridBagConstraints gbcp;
-    private JButton randomModeButton;
+    private JButton startGameButton;
     private JButton chooseModeButton;
 
     public WastedWarsView(WastedWarsModel model) {
@@ -41,9 +41,9 @@ public class WastedWarsView {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 20, 20, 20);
-        randomModeButton = new JButton("Start Game");
-        randomModeButton.setPreferredSize(new Dimension(150, 150));
-        modePanel.add(randomModeButton, gbc);
+        startGameButton = new JButton("Start Game");
+        startGameButton.setPreferredSize(new Dimension(150, 150));
+        modePanel.add(startGameButton, gbc);
 
         mainPanel.add(modePanel, BorderLayout.CENTER);
 
@@ -133,12 +133,8 @@ public class WastedWarsView {
         return addPlayerButton;
     }
 
-    public JButton getRandomModeButton() {
-        return randomModeButton;
-    }
-
-    public JButton getChooseModeButton() {
-        return chooseModeButton;
+    public JButton getStartGameButton() {
+        return startGameButton;
     }
 
     public JFrame getFrame() {
