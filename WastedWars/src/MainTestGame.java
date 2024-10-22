@@ -23,7 +23,6 @@ public class MainTestGame {
 
         frame.add(view);
 
-        // Show the frame
         frame.setVisible(true);
     }
 }
