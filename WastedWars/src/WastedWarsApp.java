@@ -6,16 +6,12 @@ import WastedWars.src.View.WastedWarsView;
 
 public class WastedWarsApp {
     public static void main(String[] args) {
-        // Initialize Model
         WastedWarsModel model = new WastedWarsModel();
 
-        // Initialize View
         WastedWarsView view = new WastedWarsView(model);
 
-        // Initialize Controller
         new WastedWarsController(model, view);
 
-        // Launch the application
         view.show();
     }
 }

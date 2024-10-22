@@ -14,22 +14,18 @@ public class DecibelChallengeView extends JPanel {
         this.model = model;
         setLayout(new BorderLayout());
 
-        // Initialize the custom volume bar, adjust its size
         volumeBar = new CustomProgressBar(0, 100, DecibelChallengeModel.WIN_THRESHOLD);
-        volumeBar.setStringPainted(false); // Disable default string painting
         volumeBar.setForeground(Color.RED);
-        volumeBar.setPreferredSize(new Dimension(50, 200)); // Adjusted to be smaller
+        volumeBar.setPreferredSize(new Dimension(50, 200));
 
         JLabel instructions = new JLabel("Scream loud enough to win!", SwingConstants.CENTER);
         instructions.setFont(new Font("Arial", Font.BOLD, 18));
 
-        // Add components, with the progress bar on the left side
         add(instructions, BorderLayout.NORTH);
-        add(volumeBar, BorderLayout.WEST); // Put the bar on the left
+        add(volumeBar, BorderLayout.WEST);
     }
 
     public void startGame() {
-        // Start a timer to update the volume bar
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -41,14 +37,13 @@ public class DecibelChallengeView extends JPanel {
                     endGame();
                 }
             }
-        }, 0, 100); // Update every 100ms
+        }, 0, 100);
     }
 
     private void updateVolumeBar() {
         float soundLevel = model.getSoundLevel();
-        int progress = (int) Math.min(100, soundLevel); // Limit progress to 100%
+        int progress = (int) Math.min(100, soundLevel);
         volumeBar.setValue(progress);
-        // No need to call volumeBar.setString() anymore, as we are manually painting it
     }
 
     private void endGame() {

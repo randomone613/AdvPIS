@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+//TODO peut etre enlever definitivement, aucune utilisation
+
 public class GameWindowController {
     private WastedWarsModel model;
     private GameWindow gameWindow;

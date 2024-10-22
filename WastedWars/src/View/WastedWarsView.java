@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.List;
 
 public class WastedWarsView {
-    private static final int MAX_PLAYERS = 6;  // Maximum number of players allowed
+    private static final int MAX_PLAYERS = 6;
     private WastedWarsModel model;
     private JFrame frame;
     private JPanel playerPanel;
@@ -25,41 +25,32 @@ public class WastedWarsView {
     private void initializeView() {
         frame = new JFrame("Wasted Wars");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Fullscreen
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setUndecorated(true);
 
-        // Create main layout panel
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Title section
         JLabel title = new JLabel("Wasted Wars", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 48));
         mainPanel.add(title, BorderLayout.NORTH);
 
-        // Center buttons for modes, now vertically centered
         JPanel modePanel = new JPanel();
-        modePanel.setLayout(new GridBagLayout()); // Using GridBagLayout for centering
+        modePanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(20, 20, 20, 20); // Add some padding
-        randomModeButton = new JButton("Random Mode");
+        gbc.insets = new Insets(20, 20, 20, 20);
+        randomModeButton = new JButton("Start Game");
         randomModeButton.setPreferredSize(new Dimension(150, 150));
         modePanel.add(randomModeButton, gbc);
 
-        gbc.gridx = 1;
-        chooseModeButton = new JButton("You Choose Mode");
-        chooseModeButton.setPreferredSize(new Dimension(150, 150));
-        modePanel.add(chooseModeButton, gbc);
+        mainPanel.add(modePanel, BorderLayout.CENTER);
 
-        mainPanel.add(modePanel, BorderLayout.CENTER); // Add in the center
-
-        // Bottom panel for players
         playerPanel = new JPanel(new GridBagLayout());
         gbcp = new GridBagConstraints();
-        gbcp.insets = new Insets(5, 5, 5, 5); // Add some padding
-        gbcp.anchor = GridBagConstraints.CENTER; // Center the components
+        gbcp.insets = new Insets(5, 5, 5, 5);
+        gbcp.anchor = GridBagConstraints.CENTER;
         refreshPlayers();
 
         JScrollPane scrollPane = new JScrollPane(playerPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -73,7 +64,7 @@ public class WastedWarsView {
     }
 
     public void refreshPlayers() {
-        playerPanel.removeAll();  // Clear the player panel first
+        playerPanel.removeAll();
 
         List<Player> players = model.getPlayers();
 
@@ -81,7 +72,7 @@ public class WastedWarsView {
             addPlayerSquare(i, players.get(i).getUsername());
         }
 
-        addAddPlayerButton();  // Ensure the "Add Player" button is added last if possible
+        addAddPlayerButton();
         playerPanel.revalidate();
         playerPanel.repaint();
     }
@@ -90,14 +81,13 @@ public class WastedWarsView {
         JPanel playerBox = new JPanel();
         playerBox.setLayout(new BorderLayout());
         playerBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        playerBox.setPreferredSize(new Dimension(100, 100));  // Make squares smaller
+        playerBox.setPreferredSize(new Dimension(100, 100));
 
-        JPanel square = new JPanel(); // Placeholder for the player square
+        JPanel square = new JPanel();
         square.setPreferredSize(new Dimension(100, 100));
         square.setBackground(Color.LIGHT_GRAY);
-        playerBox.add(square, BorderLayout.CENTER); // Add square in the center
+        playerBox.add(square, BorderLayout.CENTER);
 
-        // Name label under the square
         JLabel nameLabel = new JLabel(playerName, SwingConstants.CENTER);
         nameLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -111,9 +101,8 @@ public class WastedWarsView {
             }
         });
 
-        playerBox.add(nameLabel, BorderLayout.SOUTH); // Username underneath
+        playerBox.add(nameLabel, BorderLayout.SOUTH);
 
-        // Remove player button
         if (index >= 2) {
             JButton removeButton = new JButton("-");
             removeButton.setPreferredSize(new Dimension(30, 30));
@@ -124,19 +113,19 @@ public class WastedWarsView {
             playerBox.add(removeButton, BorderLayout.NORTH);
         }
 
-        gbcp.gridx = index; // Update the gridx constraint
-        playerPanel.add(playerBox, gbcp);  // Add player square to the panel
+        gbcp.gridx = index;
+        playerPanel.add(playerBox, gbcp);
     }
 
     private void addAddPlayerButton() {
-        if (model.getPlayers().size() < MAX_PLAYERS) {  // Only add the button if less than MAX_PLAYERS
+        if (model.getPlayers().size() < MAX_PLAYERS) {
             if (addPlayerButton == null) {
                 addPlayerButton = new JButton("+ Add Player");
                 addPlayerButton.setPreferredSize(new Dimension(100, 100));
             }
 
-            gbcp.gridx = model.getPlayers().size(); // Update the gridx constraint
-            playerPanel.add(addPlayerButton, gbcp);  // Add "Add Player" button at the end
+            gbcp.gridx = model.getPlayers().size();
+            playerPanel.add(addPlayerButton, gbcp);
         }
     }
 

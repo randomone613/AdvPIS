@@ -13,34 +13,21 @@ public class WastedWarsController {
     private WastedWarsModel model;
     private WastedWarsView view;
     private List<String> miniGames;
-    private boolean isRandomMode = false; // To track if we are in random mode
 
     public WastedWarsController(WastedWarsModel model, WastedWarsView view) {
         this.model = model;
         this.view = view;
 
-        // Assuming we have a list of available mini-games in the model
         this.miniGames = List.of("OrderGame", "Question For A Shot", "Twisted Fingers", "Decibel Challenge"); // List of mini-games
 
-        // Random Mode button action
+        // Setup the single "Start Game" button for random mode
         view.getRandomModeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                isRandomMode = true;
                 startRandomMiniGame();
             }
         });
 
-        // Choose Mode button action
-        view.getChooseModeButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                isRandomMode = false;
-                chooseMiniGame();
-            }
-        });
-
-        // Add player action listener
         view.getAddPlayerButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,7 +36,6 @@ public class WastedWarsController {
             }
         });
 
-        // Escape key listener for exit confirmation
         view.getFrame().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -67,7 +53,6 @@ public class WastedWarsController {
         view.getFrame().requestFocusInWindow();
     }
 
-    // Start a random mini-game
     private void startRandomMiniGame() {
         Random random = new Random();
         int randomIndex = random.nextInt(miniGames.size());
@@ -75,47 +60,24 @@ public class WastedWarsController {
         startMiniGame(selectedMiniGame);
     }
 
-    // Open a dialog to choose a mini-game
-    private void chooseMiniGame() {
-        String[] miniGameOptions = miniGames.toArray(new String[0]); // Convert to array for JComboBox
-
-        // Show a dialog with a dropdown (JComboBox) for mini-game selection
-        String selectedGame = (String) JOptionPane.showInputDialog(view.getFrame(),
-                "Choose a Mini Game", "Choose Mini Game",
-                JOptionPane.QUESTION_MESSAGE, null, miniGameOptions, miniGameOptions[0]);
-
-        if (selectedGame != null) {
-            startMiniGame(selectedGame);
-        }
-    }
-
-    // Start the chosen mini-game
     private void startMiniGame(String miniGame) {
         switch (miniGame) {
             case "OrderGame":
                 new GameWindow(model, this, "OrderGame");
-                //System.out.println("Starting mini-game: " + miniGame);
                 break;
             case "Question For A Shot":
-                new GameWindow(model, this,"QFAS"); // Match the key used in CardLayout
-                //System.out.println("Starting mini-game: " + miniGame);
+                new GameWindow(model, this,"QFAS");
                 break;
             case "Twisted Fingers":
-                new GameWindow(model,this, "TF"); // Use "TF" instead of "Twisted Fingers"
-                //System.out.println("Starting mini-game: " + miniGame);
+                new GameWindow(model,this, "TF");
                 break;
             case "Decibel Challenge":
                 new GameWindow(model,this,  "DecibelChallenge");
-                //System.out.println("Starting mini-game: " + miniGame);
                 break;
             default:
                 JOptionPane.showMessageDialog(view.getFrame(), "Game not available!", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
-    }
-
-    public boolean getIsRandom(){
-        return isRandomMode;
     }
 
     public List<String> getMiniGames(){
