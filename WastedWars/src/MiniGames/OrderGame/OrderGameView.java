@@ -107,9 +107,9 @@ public class OrderGameView extends JPanel implements MiniGame {
     }
 
     @Override
-    public void resetGame(){
+    public void resetGame() {
         messageLabel.setText("");
-        orderLabel = new JLabel("Order: " + (model.isAscending() ? "Ascending" : "Descending"), SwingConstants.CENTER);
+        orderLabel.setText("Order: " + (model.isAscending() ? "Ascending" : "Descending"));
 
         for (JLabel slot : model.getSlotLabels()) {
             slot.setText("");
@@ -117,15 +117,15 @@ public class OrderGameView extends JPanel implements MiniGame {
         }
 
         cardPanel.removeAll();
-        cardPanel.revalidate();
-        cardPanel.repaint();
 
-        Random random = new Random();
         List<Integer> newCardValues = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUM_CARDS; i++) {
             newCardValues.add((int) (Math.random() * 100));
         }
+
         model.setCardValues(newCardValues);
+
+        Random random = new Random();
         for (JButton card : model.getCardValues()) {
             card.setPreferredSize(new Dimension(CARD_SIZE, CARD_SIZE));
             card.setTransferHandler(new ValueExportTransferHandler());

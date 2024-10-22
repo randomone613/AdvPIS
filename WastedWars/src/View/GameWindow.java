@@ -43,6 +43,12 @@ public class GameWindow {
     private Timer countdownTimer;
     private int timeRemaining;
 
+    /**
+     * Initializes the game window, sets up the layout, and selects the initial mini-game.
+     * @param model the game model containing players and game state.
+     * @param controller the game controller to handle interactions.
+     * @param miniGame the initial mini-game to start.
+     */
     public GameWindow(WastedWarsModel model, WastedWarsController controller, String miniGame) {
         this.model = model;
         this.controller = controller;
@@ -52,6 +58,10 @@ public class GameWindow {
         startSelectedGame(miniGame);
     }
 
+    /**
+     * Initializes the game window layout, creates panels for mini-games, player status, and other players.
+     * Sets up the user interface components and makes the window visible.
+     */
     private void initializeWindow() {
         frame = new JFrame("Wasted Wars - Mini Game");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -167,6 +177,10 @@ public class GameWindow {
         frame.setVisible(true);
     }
 
+    /**
+     * Starts a mini-game for the current player, and sets up a countdown timer.
+     * This function resets the mini-game state, displays a message to the current player, and handles the countdown timer for the mini-game.
+     */
     public void startMiniGame() {
         stopAndResetTimer();
 
@@ -217,6 +231,10 @@ public class GameWindow {
         startMiniGame();
     }
 
+    /**
+     * Starts a turn for the next player and randomly selects a new mini-game.
+     * This function rotates between players and selects a mini-game for the current player to play.
+     */
     private void startTurn() {
         String[] miniGameNames = {"OrderGame", "QFAS", "TF"};//, "DecibelChallenge"};
 
@@ -230,6 +248,10 @@ public class GameWindow {
         startMiniGame();
     }
 
+    /**
+     * Processes the outcome of the mini-game (win or loss).
+     * Updates player sips and moves to the next turn.
+     */
     public void processOutcome() {
         Component selectedComponent = getCurrentMiniGameComponent();
 
@@ -302,6 +324,10 @@ public class GameWindow {
         cardLayout.show(miniGamePanel, s);
     }
 
+    /**
+     * Updates the game window, refreshing the current player's status and mini-game panel.
+     * This function is called at the beginning of a player's turn to reset the display and game state.
+     */
     public void updateWindow() {
         updateCurrentPlayerPanel();
 
@@ -320,6 +346,10 @@ public class GameWindow {
         return miniGamesMap.get(currentMiniGame);
     }
 
+    /**
+     * Checks if the game has reached the end condition, where any player has reached the target number of sips.
+     * If a player reaches the target, the game ends and is reset.
+     */
     private void checkGameEnd() {
         for (Player player : model.getPlayers()) {
             if (player.getSip() >= TARGET_SIPS) {
