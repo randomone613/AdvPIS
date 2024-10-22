@@ -3,6 +3,9 @@ package WastedWars.src.MiniGames.DecibelChallenge;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A custom progress bar that displays progress vertically and shows a win threshold line.
+ */
 public class CustomProgressBar extends JProgressBar {
     private float winThreshold;
 

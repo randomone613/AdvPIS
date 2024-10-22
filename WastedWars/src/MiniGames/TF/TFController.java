@@ -3,6 +3,10 @@ package WastedWars.src.MiniGames.TF;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Controller for managing the Twisted Fingers (TF) game, handling user interactions
+ * and updating the view based on the model's state.
+ */
 public class TFController {
     private TFModel model;
     private TFView view;
@@ -21,6 +25,9 @@ public class TFController {
         updateView();
     }
 
+    /**
+     * Updates the view to highlight the required keys for the current game state.
+     */
     public void updateView() {
         view.resetKeys();
         for (String key : model.getRequiredKeys()) {
@@ -70,6 +77,9 @@ public class TFController {
         }
     }
 
+    /**
+     * Checks if the player has pressed all required keys to win the game.
+     */
     private void checkWinCondition() {
         if (model.areAllKeysPressed()) {
             view.displayMessage("You Win!");

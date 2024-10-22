@@ -4,6 +4,9 @@ import java.util.*;
 import java.util.Random;
 import java.util.Map;
 
+/**
+ * Model for the QFAS game, containing the game logic and questions.
+ */
 public class QFASModel {
 
     private Map<String, String> questions = new HashMap<>();
@@ -16,6 +19,9 @@ public class QFASModel {
         select_question();
     }
 
+    /**
+     * Adds a set of predefined questions and their answers to the game.
+     */
     public void addQuestions(){
         questions.put("What is the largest ocean in the world?", "Pacific");
         questions.put("Which country has the largest population?", "China");
@@ -53,6 +59,9 @@ public class QFASModel {
         questions.put("What is the most spoken language in the world?", "Mandarin");
     }
 
+    /**
+     * Selects a random question from the available questions or creates a random multiplication.
+     */
     public void select_question() {
         Object[] quest_list = questions.keySet().toArray();
         int index = random.nextInt(quest_list.length + 1);

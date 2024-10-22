@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Model for the TF game, containing the game logic and the state of pressed keys.
+ */
 public class TFModel {
     private List<String> requiredKeys;
     private List<String> pressedKeys;
@@ -18,6 +21,10 @@ public class TFModel {
         selectKeys(keyCount);
     }
 
+    /**
+     * Randomly selects a specified number of keys for the player to press during the game.
+     * @param keyCount The number of keys to select.
+     */
     public void selectKeys(int keyCount) {
         requiredKeys = new ArrayList<>();
 
@@ -43,6 +50,11 @@ public class TFModel {
         }
     }
 
+    /**
+     * Checks if the provided key belongs to the right hand.
+     * @param key The key to check.
+     * @return True if the key is a right hand key, false otherwise.
+     */
     public boolean isRightHand(String key) {
         for (String rightKey : rightHandKeys) {
             if (rightKey.equals(key)) {

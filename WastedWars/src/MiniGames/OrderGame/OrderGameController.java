@@ -5,6 +5,9 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.List;
 
+/**
+ * Controller for managing the Order Game's interaction between model and view.
+ */
 public class OrderGameController {
     private OrderGameModel model;
     private OrderGameView view;

@@ -6,6 +6,9 @@ import WastedWars.src.Model.GameFinishListener;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * View component for the QFAS game, displaying the user interface for the game.
+ */
 public class QFASView extends JPanel implements MiniGame {
 
     private JLabel titleLabel;

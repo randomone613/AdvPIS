@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Model for the Order Game, representing the game state and logic.
+ */
 public class OrderGameModel {
     private List<JButton> cardValues;
     private List<JLabel> slotLabels;
@@ -47,6 +50,11 @@ public class OrderGameModel {
         return ascendingOrder;
     }
 
+    /**
+     * Checks if the values in the slots are in the correct order.
+     * @param values The values to check.
+     * @return true if the order is correct, false otherwise.
+     */
     public boolean checkOrder(String[] values) {
         List<Integer> slotValues = new ArrayList<>();
         for (String value : values) {

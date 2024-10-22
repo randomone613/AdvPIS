@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.Objects;
 import WastedWars.src.Model.GameFinishListener;
 
+/**
+ * Controller for managing the QFAS game, handling user interactions between the model and view.
+ */
 public class QFASController {
     private QFASModel model;
     private QFASView view;

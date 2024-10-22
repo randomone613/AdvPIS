@@ -6,6 +6,9 @@ import WastedWars.src.Model.MiniGame;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * View component for the TF game, displaying the user interface.
+ */
 public class TFView extends JPanel implements MiniGame {
     private JLabel[] keys;
     private JLabel messageLabel;
@@ -66,6 +69,9 @@ public class TFView extends JPanel implements MiniGame {
         controller = new TFController(model, this);
     }
 
+    /**
+     * Adds hand legend to indicate which keys are for left or right hand.
+     */
     private void addLegend(GridBagConstraints gbc) {
         JLabel leftHandLegend = new JLabel("Left Hand: ");
         leftHandLegend.setForeground(new Color(77, 148, 255));
@@ -81,6 +87,11 @@ public class TFView extends JPanel implements MiniGame {
         add(rightHandLegend, gbc);
     }
 
+    /**
+     * Highlights a key in the user interface.
+     * @param key The key to highlight.
+     * @param isRightHand True if the key is for the right hand, false for the left hand.
+     */
     public void highlightKey(String key, boolean isRightHand) {
         for (JLabel label : keys) {
             if (label.getText().equals(key)) {

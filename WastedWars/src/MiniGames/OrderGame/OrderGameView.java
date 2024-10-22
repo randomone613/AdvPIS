@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * View component for the Order Game, displaying the game interface.
+ */
 public class OrderGameView extends JPanel implements MiniGame {
     private OrderGameModel model;
     private JPanel cardPanel;
@@ -91,6 +94,12 @@ public class OrderGameView extends JPanel implements MiniGame {
         }
     }
 
+    /**
+     * Checks if the card area overlaps with the slot panel area.
+     * @param x The x-coordinate of the card.
+     * @param y The y-coordinate of the card.
+     * @return true if overlapping, false otherwise.
+     */
     private boolean isOverlappingSlotArea(int x, int y) {
         int slotX = slotPanel.getX();
         int slotY = slotPanel.getY();
@@ -170,6 +179,9 @@ public class OrderGameView extends JPanel implements MiniGame {
         this.gameFinishListener = listener;
     }
 
+    /**
+     * Handles drag-and-drop export of values from card buttons.
+     */
     private class ValueExportTransferHandler extends TransferHandler {
         @Override
         protected Transferable createTransferable(JComponent c) {
@@ -215,6 +227,9 @@ public class OrderGameView extends JPanel implements MiniGame {
         }
     }
 
+    /**
+     * Handles import of values into slot labels.
+     */
     private class ValueImportTransferHandler extends TransferHandler {
         @Override
         public boolean canImport(TransferHandler.TransferSupport support) {
@@ -247,6 +262,9 @@ public class OrderGameView extends JPanel implements MiniGame {
         }
     }
 
+    /**
+     * Handles drag-and-drop export from slot labels.
+     */
     private class ValueExportFromSlotHandler extends TransferHandler {
         @Override
         protected Transferable createTransferable(JComponent c) {
@@ -268,6 +286,9 @@ public class OrderGameView extends JPanel implements MiniGame {
         }
     }
 
+    /**
+     * Checks if the player has met the win condition.
+     */
     private void checkWinCondition() {
         String[] slotValues = new String[model.getSlotLabels().size()];
         boolean allFilled = true;

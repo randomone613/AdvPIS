@@ -5,6 +5,9 @@ import WastedWars.src.Model.MiniGame;
 
 import javax.sound.sampled.LineUnavailableException;
 
+/**
+ * The model for the Decibel Challenge mini-game, managing game state and sound detection.
+ */
 public class DecibelChallengeModel implements MiniGame {
     protected static final float WIN_THRESHOLD = 80.0f; // Decibel level required to win
     private boolean isGameOver = false;
@@ -22,6 +25,9 @@ public class DecibelChallengeModel implements MiniGame {
         }
     }
 
+    /**
+     * Starts capturing sound levels from the microphone.
+     */
     @Override
     public void startGame() {
         try {
@@ -47,6 +53,9 @@ public class DecibelChallengeModel implements MiniGame {
         }
     }
 
+    /**
+     * Checks the current sound level to determine if the player has won.
+     */
     public void checkSoundLevel() {
         float currentLevel = soundDetector.getSoundLevel();
         if (currentLevel >= WIN_THRESHOLD) {

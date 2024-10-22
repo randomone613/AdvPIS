@@ -2,6 +2,9 @@ package WastedWars.src.MiniGames.DecibelChallenge;
 
 import javax.sound.sampled.*;
 
+/**
+ * Captures sound levels from the microphone to determine current sound intensity.
+ */
 public class SoundLevelDetector implements Runnable {
     private TargetDataLine microphone;
     private AudioFormat format;
@@ -14,6 +17,9 @@ public class SoundLevelDetector implements Runnable {
         microphone = (TargetDataLine) AudioSystem.getLine(info);
     }
 
+    /**
+     * Starts capturing sound from the microphone in a separate thread.
+     */
     public void startCapturing() throws LineUnavailableException {
         microphone.open(format);
         microphone.start();
@@ -48,6 +54,9 @@ public class SoundLevelDetector implements Runnable {
         return currentSoundLevel;
     }
 
+    /**
+     * Stops capturing sound and closes the microphone line.
+     */
     public void stopCapturing() {
         capturing = false;
         microphone.stop();

@@ -5,6 +5,9 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * The view component for the Decibel Challenge, displaying instructions and sound level progress.
+ */
 public class DecibelChallengeView extends JPanel {
     private DecibelChallengeModel model;
     private CustomProgressBar volumeBar;
@@ -25,6 +28,9 @@ public class DecibelChallengeView extends JPanel {
         add(volumeBar, BorderLayout.WEST);
     }
 
+    /**
+     * Starts the game and schedules regular updates to the volume bar.
+     */
     public void startGame() {
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -40,12 +46,18 @@ public class DecibelChallengeView extends JPanel {
         }, 0, 100);
     }
 
+    /**
+     * Updates the progress bar based on the current sound level from the model.
+     */
     private void updateVolumeBar() {
         float soundLevel = model.getSoundLevel();
         int progress = (int) Math.min(100, soundLevel);
         volumeBar.setValue(progress);
     }
 
+    /**
+     * Ends the game and displays the result to the player.
+     */
     private void endGame() {
         timer.cancel();
         if (model.isWin()) {
