@@ -6,6 +6,9 @@ import WastedWars.src.MiniGames.DecibelChallenge.DecibelChallengeView;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class used to test DecibelChallenge.
+ */
 public class MainTestGame {
     public static void main(String[] args) {
         DecibelChallengeModel model = new DecibelChallengeModel();

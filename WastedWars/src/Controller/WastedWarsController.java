@@ -9,6 +9,9 @@ import java.awt.event.*;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Controller for the Wasted Wars game, managing the interaction between the model and the view.
+ */
 public class WastedWarsController {
     private WastedWarsModel model;
     private WastedWarsView view;
@@ -52,6 +55,9 @@ public class WastedWarsController {
         view.getFrame().requestFocusInWindow();
     }
 
+    /**
+     * Starts a random mini-game selected from the available mini-games.
+     */
     private void startRandomMiniGame() {
         Random random = new Random();
         int randomIndex = random.nextInt(miniGames.size());
@@ -59,6 +65,10 @@ public class WastedWarsController {
         startMiniGame(selectedMiniGame);
     }
 
+    /**
+     * Starts a specified mini-game.
+     * @param miniGame The name of the mini-game to start.
+     */
     private void startMiniGame(String miniGame) {
         switch (miniGame) {
             case "OrderGame":

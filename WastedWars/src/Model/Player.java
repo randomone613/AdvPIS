@@ -1,5 +1,8 @@
 package WastedWars.src.Model;
 
+/**
+* The class representing the Players in the game
+*/
 public class Player {
     private String username;
     private int sip;

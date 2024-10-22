@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * View class for the Wasted Wars game, responsible for displaying the user interface.
+ */
 public class WastedWarsView {
     private static final int MAX_PLAYERS = 6;
     private WastedWarsModel model;
@@ -15,13 +18,15 @@ public class WastedWarsView {
     private JButton addPlayerButton;
     private GridBagConstraints gbcp;
     private JButton startGameButton;
-    private JButton chooseModeButton;
 
     public WastedWarsView(WastedWarsModel model) {
         this.model = model;
         initializeView();
     }
 
+    /**
+     * Initializes the main view components and layout.
+     */
     private void initializeView() {
         frame = new JFrame("Wasted Wars");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,6 +68,9 @@ public class WastedWarsView {
         frame.setVisible(true);
     }
 
+    /**
+     * Refreshes the player display to show current players.
+     */
     public void refreshPlayers() {
         playerPanel.removeAll();
 
@@ -117,6 +125,9 @@ public class WastedWarsView {
         playerPanel.add(playerBox, gbcp);
     }
 
+    /**
+     * Adds a button to add a new player if the maximum hasn't been reached.
+     */
     private void addAddPlayerButton() {
         if (model.getPlayers().size() < MAX_PLAYERS) {
             if (addPlayerButton == null) {
